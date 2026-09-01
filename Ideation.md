@@ -617,24 +617,326 @@ If these 9 steps work smoothly, **ship the MVP.**
 Everything beyond this is optimization or expansion, not MVP scope.
 
 ---
+# YT-RAGBot — V2 & Future Scope
 
-# V2 Direction
+## V2 — RAG Quality & Production Improvements
 
-Once MVP usage is stable:
+Once the MVP is stable, focus on improving **retrieval quality, reliability, and scalability**.
+
+### 1. RAG Evaluation ⭐
+
+Build a small evaluation dataset:
+
+```text
+Question
+   ↓
+Expected / Ground-Truth Answer
+   ↓
+Retrieved Chunks
+   ↓
+Generated Answer
+```
+
+Track:
+
+* Context Precision
+* Context Relevance
+* Answer Relevancy
+* Faithfulness
+* Retrieval accuracy / Recall@K
+* Response latency
+
+Use the evaluation set to compare changes to chunking, embeddings, retrieval and prompts rather than relying only on manual testing. RAG evaluation frameworks such as Ragas can measure faithfulness, answer relevancy and context precision.
+
+---
+
+### 2. Better Retrieval
+
+Current:
+
+```text
+Query → Embedding → FAISS → Top-K Chunks → LLM
+```
+
+Future:
+
+```text
+Query
+  ↓
+Dense Retrieval ──┐
+                  ├── Hybrid / Fusion
+Sparse Retrieval ─┘
+         ↓
+      Re-ranking
+         ↓
+ Context Selection
+         ↓
+        LLM
+```
+
+Explore:
+
+* Better chunking strategies
+* Metadata-aware retrieval
+* Query expansion
+* Hybrid search: dense + BM25
+* Reciprocal Rank Fusion (RRF)
+* Cross-encoder / late-interaction reranking
+* Context compression
+
+Hybrid retrieval can combine semantic matching with exact keyword matching, while reranking can refine a smaller candidate set after initial retrieval.
+
+---
+
+## 3. FAISS → Scalable Vector Database
+
+### MVP
+
+Keep:
+
+```text
+FAISS
++
+Metadata store
+```
+
+FAISS is a good fit for the current project because it provides efficient dense-vector similarity search without requiring a separate vector database service.
+
+### Future
+
+Abstract the vector-store layer:
+
+```text
+             Retriever Interface
+                    │
+          ┌─────────┴─────────┐
+          │                   │
+        FAISS               Qdrant
+        (MVP)             (Production)
+```
+
+Potential alternatives:
+
+* Qdrant
+* Pinecone
+* Weaviate
+* Chroma
+
+**Preferred future experiment: Qdrant**
+
+Qdrant supports persistent vector storage, payload metadata and more advanced retrieval patterns including hybrid search and multi-stage reranking.
+
+Do **not** migrate from FAISS just for the sake of using a "production" database. Migrate when persistence, scale, filtering, hybrid retrieval or deployment requirements justify it.
+
+---
+
+# V2 — Video Intelligence
+
+Add features that make YT-RAGBot more than a generic RAG chatbot:
+
+* Automatic topic/chapter extraction
+* Topic-based video timeline
+* Better timestamp-aware retrieval
+* Automatic video summary
+* Key takeaways
+* Important moments
+* Section-specific Q&A
+* Multi-video RAG
+
+Example:
+
+```text
+Video
+ │
+ ├── Introduction       00:00
+ ├── RAG                06:42
+ ├── Embeddings         14:21
+ ├── Vector Databases   23:10
+ └── Conclusion         37:45
+```
+
+---
+
+# V2 — Persistence & User Experience
+
+After the core workflow works:
+
+* User authentication
+* Saved videos
+* Persistent conversations
+* `/video/[videoId]` pages
+* Video library
+* Rename conversations
+* Delete/archive videos
+* AI-generated notes
+* Markdown/PDF export
+* Dark/light mode
+* Better mobile experience
+
+---
+
+# V2 — Performance & Backend
+
+Introduce production-oriented infrastructure:
+
+```text
+Frontend
+    ↓
+FastAPI
+    ↓
+Background Job
+    ↓
+Transcript Processing
+    ↓
+Embedding Generation
+    ↓
+Vector Store
+```
+
+Potential additions:
+
+* Redis caching
+* Background task queue
+* Rate limiting
+* Request validation
+* Retry mechanisms
+* Structured logging
+* Error tracking
+* API authentication
+* Response/embedding caching
+
+---
+
+# V3 — Advanced RAG
+
+Only after V2 retrieval is properly evaluated.
+
+### Advanced Retrieval
+
+* Hybrid dense + sparse retrieval
+* Multi-query retrieval
+* Query rewriting
+* Reranking
+* Parent-document retrieval
+* Contextual chunking
+* Adaptive `top-k`
+* Metadata filtering
+* Retrieval routing
+
+### Advanced Generation
+
+* Better citation grounding
+* Hallucination detection
+* Answer confidence
+* "Insufficient information" detection
+* Structured responses
+* Model routing
+
+---
+
+# V3 — Multi-Video Knowledge Base
+
+Move from:
+
+```text
+One YouTube Video
+      ↓
+One Knowledge Base
+      ↓
+Chat
+```
+
+to:
+
+```text
+Multiple Videos
+      ↓
+Unified Knowledge Base
+      ↓
+Cross-Video Retrieval
+      ↓
+AI Research Assistant
+```
+
+Example:
+
+> "Compare how these three videos explain RAG."
+
+This could become one of the strongest differentiating features of the project.
+
+---
+
+# V3 — Production & Observability
+
+For a real deployed application:
+
+* PostgreSQL for application data
+* Redis
+* Managed vector database
+* Background workers
+* Docker
+* CI/CD
+* Monitoring
+* Error tracking
+* Usage analytics
+* API rate limiting
+* Cost tracking
+* RAG evaluation in CI
+
+RAG evaluation should eventually become part of CI so changes to prompts, embeddings, chunking or retrieval don't silently reduce quality.
+
+---
+
+# Long-Term Product Direction
 
 ```text
 MVP
- │
- ├── Authentication
- ├── Saved Videos
- ├── Persistent Conversations
- ├── Notes / Export
- ├── AI Summary
- ├── Timeline / Topics
- ├── Quiz / Flashcards
- └── Multi-video RAG
+│
+├── YouTube → Transcript
+├── FAISS RAG
+├── AI Chat
+├── Streaming
+└── Timestamp Citations
+        │
+        ▼
+V2 — Better RAG
+│
+├── RAG Evaluation ⭐
+├── Better Chunking
+├── Hybrid Retrieval
+├── Reranking
+├── Qdrant Experiment
+├── Persistence
+└── Video Intelligence
+        │
+        ▼
+V3 — Advanced AI
+│
+├── Multi-Video RAG
+├── Query Routing
+├── Advanced Retrieval
+├── Hallucination Detection
+└── Model Routing
+        │
+        ▼
+Production
+│
+├── PostgreSQL
+├── Redis
+├── Background Workers
+├── Docker
+├── CI/CD
+├── Monitoring
+└── RAG Evaluation in CI
 ```
 
-**Rule:** Do not add a feature to MVP unless it directly improves the core loop:
+## Priority Rule
 
-> **Video → Retrieve → Ask → Answer → Verify**
+Do not add features simply because they are technically interesting.
+
+Prioritize in this order:
+
+**1. RAG quality → 2. Evaluation → 3. Scalability → 4. UX → 5. Advanced AI features**
+
+The core long-term goal is to evolve YT-RAGBot from a **working RAG demo** into a **measurable, production-style RAG system**.
+

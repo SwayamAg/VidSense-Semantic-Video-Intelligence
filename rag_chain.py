@@ -1,6 +1,10 @@
+import warnings
+warnings.filterwarnings("ignore", message="urllib3 .* or chardet .* doesn't match a supported version!")
+
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
 from langchain_core.output_parsers import StrOutputParser
+
 from config import get_llm, RETRIEVAL_K, SEARCH_TYPE
 from ingestion import get_or_create_vector_store
 
@@ -73,5 +77,7 @@ def get_rag_chain(video_id: str):
 
 if __name__ == "__main__":
     from config import YOUTUBE_VIDEO_ID
-    if get_rag_chain(YOUTUBE_VIDEO_ID):
+    chain, _ = get_rag_chain(YOUTUBE_VIDEO_ID)
+    if chain:
         print("[OK] RAG Pipeline diagnostic passed.")
+

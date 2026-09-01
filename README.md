@@ -3,7 +3,7 @@
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![LangChain](https://img.shields.io/badge/langchain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
-![Azure](https://img.shields.io/badge/azure_openai-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![OpenAI](https://img.shields.io/badge/openai-412991?style=for-the-badge&logo=openai&logoColor=white)
 ![FAISS](https://img.shields.io/badge/FAISS-005571?style=for-the-badge&logo=meta&logoColor=white)
 
 ---
@@ -11,13 +11,13 @@
 ## 📝 Overview
 **YT-RAG Bot** is a production-ready system designed to perform deep analysis on YouTube transcripts. It bridges the gap between passive video watching and active learning by allowing users to query video content with instant, precise answers.
 
-Built with **LangChain** and **Azure OpenAI**, this project automates the entire process: from extracting a video's transcript to creating a searchable local database that grounds an AI's answers in actual video facts.
+Built with **LangChain** and **OpenAI API**, this project automates the entire process: from extracting a video's transcript to creating a searchable local database that grounds an AI's answers in actual video facts.
 
 ### 🎯 Why This Matters
 In an era of information overload, finding specific details in long videos is time-consuming. This project is a powerful tool for:
 - **Students & Researchers**: Instantly find specific academic concepts or data points within hours of lectures or interviews.
 - **Content Consumers**: Quickly verify facts or summarize key takeaways from documentaries and podcasts.
-- **Developers**: A blueprint for building robust, modular RAG applications with multi-resource cloud integration.
+- **Developers**: A blueprint for building robust, modular RAG applications with OpenAI.
 
 ---
 
@@ -38,9 +38,9 @@ In an era of information overload, finding specific details in long videos is ti
 - ⏱️ **Temporal Citations**: Injects `[MM:SS]` timestamps into the knowledge base, allowing the AI to cite specific parts of the video.
 - 🔍 **Intelligent Search**: Uses **FAISS** with video-specific indices to find relevant information without data overlap.
 - 🤖 **High-Fidelity Responses**: Specialized prompt engineering provides categorized, plain-text technical summaries.
-- 🌐 **Flexible Cloud Setup**: Native support for using separate Azure OpenAI resources for chat and embeddings.
+- ⚡ **Direct OpenAI API Integration**: Powered directly by OpenAI's official API (`ChatOpenAI` and `OpenAIEmbeddings`).
 - 💾 **Isolated Local Storage**: Saves video data in unique sub-directories for sub-second response times and reduced API costs.
-- 🛠️ **Diagnostic Suite**: Built-in tools (`debug_azure.py` and `debug_youtube.py`) to verify cloud connections and ingestion health.
+- 🛠️ **Diagnostic Suite**: Built-in tools (`debug_openai.py` and `debug_youtube.py`) to verify API connections and ingestion health.
 
 ---
 
@@ -48,8 +48,8 @@ In an era of information overload, finding specific details in long videos is ti
 | Category | Tools & Frameworks |
 | :--- | :--- |
 | **Orchestration** | [LangChain](https://www.langchain.com/) (LCEL) |
-| **Generative AI** | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) (GPT-4o) |
-| **Embeddings** | Azure OpenAI `text-embedding-3-small` |
+| **Generative AI** | [OpenAI API](https://openai.com/) (`gpt-4o-mini` / `gpt-4o`) |
+| **Embeddings** | OpenAI `text-embedding-3-small` |
 | **Search Engine** | [FAISS](https://github.com/facebookresearch/faiss) (L2 Similarity) |
 | **Data Ingestion** | `yt-dlp`, `youtube-transcript-api` |
 | **Utilities** | `python-dotenv`, `RecursiveCharacterTextSplitter` |
@@ -65,21 +65,15 @@ cd YT-RAG-Bot-Semantic-Video-Intelligence
 ```
 
 ### 2. Configure Environment Variables
-Create a `.env` file in the root directory. This project supports **separate resources** for the Chat model and Embeddings:
+Create a `.env` file in the root directory (or copy from `.env.example`):
 ```env
-# Chat Model Config
-AZURE_OPENAI_API_KEY=your_primary_key
-AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-AZURE_OPENAI_DEPLOYMENT=your-gpt-deployment
-AZURE_OPENAI_API_VERSION=2024-02-01
-
-# Embeddings Config (Optional Override)
-AZURE_EMBEDDINGS_ENDPOINT=https://your-embed-resource.openai.azure.com/
-AZURE_EMBEDDINGS_API_KEY=your_secondary_key
-AZURE_EMBEDDINGS_DEPLOYMENT=your-embedding-deployment
+# Standard OpenAI API Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 
 # Defaults
-YOUTUBE_URL=https://www.youtube.com/watch?v=Gfr50f6ZBvo
+YOUTUBE_VIDEO_ID=Gfr50f6ZBvo
 ```
 
 ### 3. Setup Virtual Environment
@@ -106,9 +100,9 @@ Verify your YouTube ingestion health:
 ```bash
 python debug_youtube.py
 ```
-Verify your Azure configuration:
+Verify your OpenAI configuration:
 ```bash
-python debug_azure.py
+python debug_openai.py
 ```
 
 ---
@@ -120,9 +114,9 @@ YT-RAG_BOT/
 ├── ingestion.py       # Triple-Redundancy Pipeline (yt-dlp -> scraper -> local)
 ├── rag_chain.py       # RAG Logic & Prompt Engineering
 ├── utils.py           # oEmbed Metadata & URL Utilities
-├── config.py          # Configuration & Azure Factories
+├── config.py          # Configuration & OpenAI Factories
 ├── debug_youtube.py   # Ingestion Diagnostic Script
-├── debug_azure.py     # Connection Diagnostic Script
+├── debug_openai.py    # OpenAI Connection Diagnostic Script
 ├── summary.md         # Technical Deep-Dive Documentation
 └── requirements.txt   # Dependency Management
 ```
@@ -138,12 +132,12 @@ graph LR
     end
 
     subgraph VECTOR["🗄️ Vector Store"]
-        D --> E["Azure OpenAI Embeddings"] --> F[("FAISS Index\n(Video-Specific)")]
+        D --> E["OpenAI Embeddings"] --> F[("FAISS Index\n(Video-Specific)")]
     end
 
     subgraph RAG["🔗 RAG Pipeline"]
         G["🔍 User Query"] --> H["Similarity Search"]
-        F --> H --> I["Structured Prompt"] --> J["🤖 Azure GPT-4o"] --> K["✅ High-Fidelity Answer"]
+        F --> H --> I["Structured Prompt"] --> J["🤖 OpenAI Chat Model"] --> K["✅ High-Fidelity Answer"]
     end
 
     classDef input   fill:#3b1f4a,stroke:#c678dd,color:#f0e6ff
@@ -162,7 +156,7 @@ graph LR
 ## 👨‍💻 Model & Pipeline Details
 - **Text Processing**: Uses a recursive strategy to split transcripts into 1000-character segments with a 200-character overlap for context preservation.
 - **Retrieval**: Similarity-based retrieval returning the top 4 most relevant transcript sections.
-- **LLM Configuration**: Powered by GPT-4o with a low temperature (0.2) to ensure factual, non-creative answers.
+- **LLM Configuration**: Powered by `gpt-4o-mini` (or `gpt-4o`) with a low temperature (0.2) to ensure factual, non-creative answers.
 
 ---
 

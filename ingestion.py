@@ -1,6 +1,11 @@
 import os
+import warnings
 from typing import Optional
+
+warnings.filterwarnings("ignore", message="urllib3 .* or chardet .* doesn't match a supported version!")
+
 from langchain_community.document_loaders import YoutubeLoader, TextLoader
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from config import (
@@ -159,5 +164,7 @@ def get_or_create_vector_store(video_id: str):
 
 if __name__ == "__main__":
     from config import YOUTUBE_VIDEO_ID
-    if get_or_create_vector_store(YOUTUBE_VIDEO_ID):
+    vs, _ = get_or_create_vector_store(YOUTUBE_VIDEO_ID)
+    if vs:
         print("[OK] Ingestion system diagnostic passed.")
+

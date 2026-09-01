@@ -23,7 +23,7 @@ langchain-community==0.3.12
 langchain-text-splitters==0.3.3
 langchain-experimental
 
-# ==== OpenAI (Azure compatible) =====
+# ==== OpenAI =====
 openai==1.58.1
 
 # ==== Data / Config =====

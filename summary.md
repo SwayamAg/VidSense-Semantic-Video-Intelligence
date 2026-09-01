@@ -4,7 +4,7 @@
 As a senior developer, this project was architected with three core principles in mind:
 1.  **Modularity**: Separation of concerns between configuration, data ingestion, and business logic.
 2.  **Robustness**: Handling network-sensitive operations (YouTube scraping) with automated fallbacks.
-3.  **Configurability**: Supporting complex enterprise Azure setups (multi-resource/multi-endpoint).
+3.  **Configurability**: Clean OpenAI model configuration with flexible environment variables.
 
 ---
 
@@ -15,7 +15,7 @@ graph TD
     subgraph "Ingestion Layer"
         A[YouTube URL / Local File] --> B(Data Ingestion Engine)
         B --> C{Source Check}
-        C -->|HTTP Fetch| D[YoutubeLoader]
+        C -->|HTTP Fetch| D[YoutubeLoader / yt-dlp]
         C -->|IO Fallback| E[Local TextLoader]
         D --> F[Raw Transcript]
         E --> F
@@ -24,7 +24,7 @@ graph TD
     subgraph "Vectorization Layer"
         F --> G(Recursive Character Splitting)
         G --> H[Semantic Chunks]
-        H --> I(Azure OpenAI Embedding API)
+        H --> I(OpenAI Embedding API)
         I --> J[(FAISS Vector DB)]
     end
 
@@ -34,7 +34,7 @@ graph TD
         L --> M[Relevant Context]
         M --> N(Prompt Augmentation)
         K --> N
-        N --> O(Azure OpenAI GPT-4 API)
+        N --> O(OpenAI Chat API)
         O --> P[Semantic Response]
     end
 ```
@@ -43,10 +43,10 @@ graph TD
 
 ## 🔬 Technical Deep Dive
 
-### 1. Multi-Resource Azure Integration
-In production environments, LLMs (GPT-4) and Embedding models (text-embedding-3-small) are often hosted on separate resources or regions to balance quota limits and availability. 
-- **The Solution**: Our `config.py` uses a prioritized lookup logic. It allows for a single global key/endpoint but gracefully handles overrides for embeddings (`AZURE_EMBEDDINGS_ENDPOINT`).
-- **Validation**: The `validate_env()` function ensures all permutations of these variables are correctly set before the app initializes.
+### 1. OpenAI API Integration
+The system natively communicates with OpenAI's official API using `ChatOpenAI` and `OpenAIEmbeddings` via LangChain.
+- **Configurability**: Configured via `OPENAI_API_KEY`, `OPENAI_MODEL` (e.g., `gpt-4o-mini` or `gpt-4o`), and `OPENAI_EMBEDDING_MODEL` (e.g., `text-embedding-3-small`).
+- **Validation**: The `validate_env()` function ensures the API key is provided before initializing the application.
 
 ### 2. Semantic Chunking (Recursive Character Splitting)
 **Why it matters**: Naive splitting (e.g., every 100 words) can cut through a middle of a sentence, destroying meaning.
@@ -63,14 +63,12 @@ In production environments, LLMs (GPT-4) and Embedding models (text-embedding-3-
 ## 🚀 How to Run (SDE Quickstart)
 
 ### 1. Configuration (`.env`)
-Populate the following variables. Note the optional separate embedding resource.
+Populate the following variables:
 ```env
-AZURE_OPENAI_API_KEY=...
-AZURE_OPENAI_ENDPOINT=...
-AZURE_OPENAI_DEPLOYMENT=...
-AZURE_EMBEDDINGS_ENDPOINT=... # Optional override
-AZURE_EMBEDDINGS_API_KEY=...  # Optional override
-AZURE_EMBEDDINGS_DEPLOYMENT=...
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+YOUTUBE_VIDEO_ID=Gfr50f6ZBvo
 ```
 
 ### 2. Execution
@@ -95,8 +93,10 @@ python main.py
 ---
 
 ## 🛠 Project Components
-- `config.py`: Configuration factory and validation.
+- `config.py`: Configuration factory and validation for OpenAI.
 - `utils.py`: High-performance utility functions (Regex URL extraction).
 - `ingestion.py`: The ETL pipeline (Extract, Transform, Load).
 - `rag_chain.py`: Declarative pipeline definition using LangChain LCEL.
+- `debug_openai.py`: Diagnostic script for validating OpenAI API access.
 - `main.py`: CLI orchestration and state management.
+

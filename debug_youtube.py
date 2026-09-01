@@ -1,6 +1,11 @@
 import os
 import sys
+import warnings
+
+warnings.filterwarnings("ignore", message="urllib3 .* or chardet .* doesn't match a supported version!")
+
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound, VideoUnavailable
+
 from utils import extract_video_id, get_video_title
 from config import LOCAL_TRANSCRIPT_PATH, YOUTUBE_VIDEO_ID
 

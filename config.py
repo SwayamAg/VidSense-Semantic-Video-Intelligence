@@ -1,7 +1,12 @@
 import os
 import sys
+import warnings
 from dotenv import load_dotenv
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+
+# Suppress known urllib3/requests version mismatch warnings
+warnings.filterwarnings("ignore", message="urllib3 .* or chardet .* doesn't match a supported version!")
+
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from utils import extract_video_id
 
 # Load environment variables
@@ -20,47 +25,50 @@ LOCAL_TRANSCRIPT_PATH = "transcript.txt"
 RETRIEVAL_K = 4
 SEARCH_TYPE = "similarity"
 
+# OpenAI Model settings
+DEFAULT_OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+DEFAULT_EMBEDDING_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
+
 def validate_env():
-    """Validates that all necessary Azure OpenAI environment variables are set."""
+    """Validates that all necessary OpenAI environment variables are set."""
     required = [
-        "AZURE_OPENAI_API_KEY",
-        "AZURE_OPENAI_ENDPOINT",
-        "AZURE_OPENAI_API_VERSION",
-        "AZURE_OPENAI_DEPLOYMENT",
-        "AZURE_EMBEDDINGS_DEPLOYMENT"
+        "OPENAI_API_KEY"
     ]
     missing = [var for var in required if not os.getenv(var)]
     if missing:
         print(f"[ERROR] Missing environment variables: {', '.join(missing)}")
-        print("Please check your .env file.")
+        print("Please check your .env file and ensure OPENAI_API_KEY is set.")
         return False
     return True
 
 def get_llm():
-    """Initializes and returns the Azure OpenAI Chat model."""
+    """Initializes and returns the OpenAI Chat model."""
     if not validate_env():
         sys.exit(1)
         
-    return AzureChatOpenAI(
-        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
-        deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-        temperature=0.2
-    )
+    kwargs = {
+        "model": os.getenv("OPENAI_MODEL", DEFAULT_OPENAI_MODEL),
+        "api_key": os.getenv("OPENAI_API_KEY"),
+        "temperature": 0.2,
+    }
+    base_url = os.getenv("OPENAI_BASE_URL")
+    if base_url:
+        kwargs["base_url"] = base_url
+
+    return ChatOpenAI(**kwargs)
 
 def get_embeddings():
-    """Initializes and returns the Azure OpenAI Embeddings model."""
+    """Initializes and returns the OpenAI Embeddings model."""
     if not validate_env():
         sys.exit(1)
         
-    # Support for separate embedding resource (Endpoint and Key)
-    endpoint = os.getenv("AZURE_EMBEDDINGS_ENDPOINT") or os.getenv("AZURE_OPENAI_ENDPOINT")
-    api_key = os.getenv("AZURE_EMBEDDINGS_API_KEY") or os.getenv("AZURE_OPENAI_API_KEY")
-    
-    return AzureOpenAIEmbeddings(
-        azure_endpoint=endpoint,
-        api_key=api_key,
-        api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
-        azure_deployment=os.getenv("AZURE_EMBEDDINGS_DEPLOYMENT"),
-    )
+    kwargs = {
+        "model": os.getenv("OPENAI_EMBEDDING_MODEL", DEFAULT_EMBEDDING_MODEL),
+        "api_key": os.getenv("OPENAI_API_KEY"),
+    }
+    base_url = os.getenv("OPENAI_BASE_URL")
+    if base_url:
+        kwargs["base_url"] = base_url
+
+    return OpenAIEmbeddings(**kwargs)
+

@@ -1,6 +1,10 @@
+import os
 import re
+import warnings
 from typing import Optional
-from langchain_community.document_loaders import YoutubeLoader
+
+warnings.filterwarnings("ignore", message="urllib3 .* or chardet .* doesn't match a supported version!")
+
 
 def extract_video_id(url: str) -> Optional[str]:
     """

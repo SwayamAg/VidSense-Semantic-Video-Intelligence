@@ -243,16 +243,23 @@ TIMESTAMPS:
 
 ## 🔮 Future Scope & Roadmap
 
+> 📖 **Full-Stack AI Architecture & Evolution Plan**: For the complete technical ideation, UI design wireframes (Next.js + `assistant-ui` + shadcn/ui), RAG evaluation (Ragas), and multi-video research roadmap, see the [Full-Stack Ideation Document](./Ideation.md).
+
+- **💻 Full-Stack AI Research Workspace (Next.js + assistant-ui + shadcn/ui)**
+  - *Why/When*: Transitioning from CLI/REST to a 3-pane interactive research workspace (Video Player + Streaming AI Chat + Timestamp Citations & Topics Panel).
 - **🔀 Hybrid Search + Re-ranking (Dense + BM25 + FlashRank)**
   - *Why/When*: Pure vector search can miss exact keywords, numbers, or technical jargon (e.g., `"GPT-4o"`, `"CUDA 12.1"`). Combining FAISS with **BM25** and a local cross-encoder re-ranker boosts retrieval precision by ~30%.
+- **📊 RAG Quality & Evaluation (Ragas Framework)**
+  - *Why/When*: Measuring Faithfulness, Answer Relevance, and Context Precision systematically across chunking/prompt iterations instead of relying solely on manual evaluation.
 - **🎬 Multi-Modal Video RAG (Visual Keyframe Search)**
   - *Why/When*: Technical videos frequently show slides, diagrams, and code not spoken aloud. Sampling keyframes and indexing with **ColPali** or **CLIP / Vision LLMs** allows querying on-screen visuals.
 - **🎙️ Speaker Diarization (Who Spoke When)**
   - *Why/When*: Multi-speaker podcasts and panels blur speaker context. Integrating `whisperx` / `pyannote.audio` tags segments (e.g., `[Host]` vs. `[Guest]`) for speaker-targeted queries.
-- **⚡ Google TurboQuant / TurboVec Memory Compression**
-  - *Why/When*: When scaling from single videos to indexing thousands of channel archives, TurboQuant achieves **~8x memory compression** with training-free quantization, minimizing RAM overhead.
-- **🌊 Real-time Token Streaming (SSE / WebSockets) & Web UI**
-  - *Why/When*: Delivers sub-second Time-To-First-Token (TTFT) and pairs the FastAPI backend with a **Streamlit / Gradio** or **Next.js** frontend.
+- **⚡ Google TurboQuant / TurboVec / Qdrant Scaling**
+  - *Why/When*: When scaling from single videos to indexing thousands of channel archives, TurboQuant achieves **~8x memory compression**, and Qdrant provides managed multi-tenant persistence.
+- **🌊 Real-time Token Streaming (SSE / WebSockets)**
+  - *Why/When*: Delivers sub-second Time-To-First-Token (TTFT) for low-latency conversational UX.
+
 
 
 ---

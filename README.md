@@ -241,10 +241,19 @@ TIMESTAMPS:
 
 ---
 
-## 🔮 Future Improvements
-- [ ] **Streaming Chat Responses**: Add Server-Sent Events (SSE) / WebSockets for token streaming in the API.
-- [ ] **Streamlit / Gradio Web UI**: Build a frontend consuming the FastAPI endpoints.
-- [ ] **Multi-Video Collections**: Enable querying across entire playlists or YouTube channels simultaneously.
+## 🔮 Future Scope & Roadmap
+
+- **🔀 Hybrid Search + Re-ranking (Dense + BM25 + FlashRank)**
+  - *Why/When*: Pure vector search can miss exact keywords, numbers, or technical jargon (e.g., `"GPT-4o"`, `"CUDA 12.1"`). Combining FAISS with **BM25** and a local cross-encoder re-ranker boosts retrieval precision by ~30%.
+- **🎬 Multi-Modal Video RAG (Visual Keyframe Search)**
+  - *Why/When*: Technical videos frequently show slides, diagrams, and code not spoken aloud. Sampling keyframes and indexing with **ColPali** or **CLIP / Vision LLMs** allows querying on-screen visuals.
+- **🎙️ Speaker Diarization (Who Spoke When)**
+  - *Why/When*: Multi-speaker podcasts and panels blur speaker context. Integrating `whisperx` / `pyannote.audio` tags segments (e.g., `[Host]` vs. `[Guest]`) for speaker-targeted queries.
+- **⚡ Google TurboQuant / TurboVec Memory Compression**
+  - *Why/When*: When scaling from single videos to indexing thousands of channel archives, TurboQuant achieves **~8x memory compression** with training-free quantization, minimizing RAM overhead.
+- **🌊 Real-time Token Streaming (SSE / WebSockets) & Web UI**
+  - *Why/When*: Delivers sub-second Time-To-First-Token (TTFT) and pairs the FastAPI backend with a **Streamlit / Gradio** or **Next.js** frontend.
+
 
 ---
 

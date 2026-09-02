@@ -121,10 +121,46 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                         if formatted_events:
                             return " ".join(formatted_events)
 
+            # 3. Direct Innertube captionTracks fallback if yt-dlp format fails
+            try:
+                page_url = f"https://www.youtube.com/watch?v={video_id}"
+                page_res = requests.get(page_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}, timeout=5)
+                key = '"captionTracks":'
+                pos = page_res.text.find(key)
+                if pos != -1:
+                    slice_text = page_res.text[pos + len(key):]
+                    end_pos = slice_text.find('],') + 1
+                    tracks = json.loads(slice_text[:end_pos])
+                    if tracks:
+                        chosen = next((t for t in tracks if t.get('languageCode', '').startswith('en')), tracks[0])
+                        base_url = chosen.get('baseUrl')
+                        if base_url:
+                            cap_url = base_url + "&fmt=json3" if "fmt=" not in base_url else base_url
+                            cap_res = requests.get(cap_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}, timeout=5)
+                            if cap_res.status_code == 200 and cap_res.text.strip():
+                                c_data = cap_res.json()
+                                direct_events = []
+                                for ev in c_data.get('events', []):
+                                    if 'segs' in ev and 'tStartMs' in ev:
+                                        ms = ev['tStartMs']
+                                        s = ms // 1000
+                                        m, s = divmod(s, 60)
+                                        h, m = divmod(m, 60)
+                                        t_str = f"{h}:{m:02d}:{s:02d}" if h > 0 else f"{m:02d}:{s:02d}"
+                                        txt = "".join([seg['utf8'] for seg in ev['segs'] if 'utf8' in seg])
+                                        if txt.strip():
+                                            import html
+                                            direct_events.append(f"[{t_str}] {html.unescape(txt.strip())}")
+                                if direct_events:
+                                    return " ".join(direct_events)
+            except Exception as ie:
+                print(f"[WARNING] Direct Innertube caption fallback failed: {ie}")
+
         return None
     except Exception as e:
         print(f"[WARNING] yt-dlp extraction failed: {e}")
         return None
+
 
 def fetch_transcript_with_youtube_api(video_id: str) -> Optional[str]:
     """

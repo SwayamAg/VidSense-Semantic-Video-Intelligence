@@ -16,7 +16,9 @@ import {
   Cpu
 } from "lucide-react";
 
+import { useRouter } from "next/navigation";
 import { checkHealth, getVideoInfo, ingestVideo, HealthResponse, VideoInfoResponse } from "@/lib/api";
+
 
 interface PipelineStep {
   id: string;
@@ -38,12 +40,14 @@ const SAMPLE_VIDEOS = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [url, setUrl] = useState("");
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [backendLoading, setBackendLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [videoInfo, setVideoInfo] = useState<VideoInfoResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
 
   const [steps, setSteps] = useState<PipelineStep[]>([
     { id: "validate", label: "Validating Video & Resolving Metadata", status: "idle" },
@@ -106,7 +110,13 @@ export default function Home() {
         { ...prev[4], status: "done" },
       ]);
 
+      // Automatically redirect to 3-Pane Workspace after 800ms
+      setTimeout(() => {
+        router.push(`/workspace?v=${ingestRes.video_id}`);
+      }, 800);
+
     } catch (err: unknown) {
+
       const msg = err instanceof Error ? err.message : "Failed to analyze video";
       setErrorMessage(msg);
       setSteps(prev => prev.map(s => s.status === "running" ? { ...s, status: "error" } : s));
@@ -293,11 +303,16 @@ export default function Home() {
                 <span className="text-xs text-emerald-400 font-medium">
                   ✓ Ready for conversational reasoning
                 </span>
-                <span className="text-xs text-purple-400 font-mono">
-                  Vector Space Synchronized
-                </span>
+                <button
+                  onClick={() => router.push(`/workspace?v=${videoInfo?.video_id}`)}
+                  className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs flex items-center gap-1.5 transition-all shadow-md"
+                >
+                  <span>Open Research Workspace</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
               </div>
             )}
+
           </div>
         )}
 

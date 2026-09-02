@@ -13,8 +13,10 @@ import {
   Layers, 
   Clock, 
   ExternalLink,
-  Cpu
+  Cpu,
+  Globe
 } from "lucide-react";
+
 
 import { useRouter } from "next/navigation";
 import { checkHealth, getVideoInfo, ingestVideo, HealthResponse, VideoInfoResponse } from "@/lib/api";
@@ -189,8 +191,9 @@ export default function Home() {
         </h1>
 
         <p className="mt-5 text-base sm:text-lg text-slate-400 max-w-2xl leading-relaxed">
-          Ground AI responses strictly in factual video context. Extract timestamps, inspect source citations, and query video transcripts with sub-second retrieval.
+          Ground AI responses strictly in factual video context. Supports all global English dialects (en, en-orig, en-US, en-GB, en-IN, en-CA, en-AU) and Hindi subtitles with verifiable timestamp citations.
         </p>
+
 
         {/* Input Bar */}
         <div className="w-full max-w-2xl mt-10">
@@ -330,14 +333,14 @@ export default function Home() {
         )}
 
         {/* Feature Pill Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-4xl mt-20 text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mt-20 text-left">
           <div className="glass-card p-5 rounded-2xl">
             <div className="h-8 w-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3">
               <Clock className="h-4 w-4" />
             </div>
-            <h3 className="text-sm font-semibold text-white">Temporal Timestamp Grounding</h3>
+            <h3 className="text-sm font-semibold text-white">Timestamp Grounding</h3>
             <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Captures video milliseconds and transforms them into verifiable [MM:SS] video citations.
+              Captures video milliseconds and transforms them into verifiable [MM:SS] interactive citations.
             </p>
           </div>
 
@@ -345,9 +348,19 @@ export default function Home() {
             <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
               <Layers className="h-4 w-4" />
             </div>
-            <h3 className="text-sm font-semibold text-white">Triple Ingestion Redundancy</h3>
+            <h3 className="text-sm font-semibold text-white">Triple Redundancy</h3>
             <p className="text-xs text-slate-400 mt-1 leading-relaxed">
               Automated failover between yt-dlp pro-fetch, standard scrapers, and local fallbacks.
+            </p>
+          </div>
+
+          <div className="glass-card p-5 rounded-2xl">
+            <div className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
+              <Globe className="h-4 w-4" />
+            </div>
+            <h3 className="text-sm font-semibold text-white">Global Dialect Coverage</h3>
+            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              Broad language support across en, en-orig, en-US, en-GB, en-IN, en-CA, en-AU, and Hindi.
             </p>
           </div>
 
@@ -357,10 +370,11 @@ export default function Home() {
             </div>
             <h3 className="text-sm font-semibold text-white">Isolated Vector Spaces</h3>
             <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Persistent FAISS indices isolated by Video ID to eliminate hallucination across videos.
+              Persistent FAISS indices isolated by Video ID to prevent cross-video hallucination.
             </p>
           </div>
         </div>
+
       </main>
     </div>
   );

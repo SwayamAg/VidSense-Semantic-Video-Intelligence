@@ -25,11 +25,17 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
     url = f"https://www.youtube.com/watch?v={video_id}"
     print(f"[FETCH] Attempting pro-fetch with yt-dlp for: {video_id}")
     
+    # Comprehensive English dialect & variant keys + Hindi
+    ENGLISH_KEYS = [
+        'en-orig', 'en', 'en-us', 'en-gb', 'en-ca', 'en-au', 'en-in', 
+        'en-ie', 'en-nz', 'en-za', 'en-sg', 'en-ph', 'hi', 'hi-latn'
+    ]
+
     ydl_opts = {
         'skip_download': True,
         'writeautomaticsub': True,
         'writesubtitles': True,
-        'subtitleslangs': ['en.*', 'hi.*'], # Support English and Hindi
+        'subtitleslangs': ['en.*', 'en', 'hi.*', 'hi'],
         'quiet': True,
         'no_warnings': True,
     }
@@ -43,21 +49,20 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
             if not subtitles:
                 return None
                 
-            # Pick the first available English/Hindi subtitle (including en-orig, en, hi)
-            target_langs = ['en-orig', 'en', 'en-US', 'en-GB', 'hi']
             chosen_key = None
-            for lang in target_langs:
+            # 1. Exact or prefix match against priority English dialects
+            for lang in ENGLISH_KEYS:
                 for key in subtitles.keys():
-                    if key.lower() == lang.lower() or key.lower().startswith(lang.lower()):
+                    if key.lower() == lang or key.lower().startswith(lang):
                         chosen_key = key
                         break
                 if chosen_key:
                     break
 
+            # 2. Broad fallback: any key that starts with or contains 'en'
             if not chosen_key:
-                # Fallback to any key with 'en' in it
                 for key in subtitles.keys():
-                    if 'en' in key.lower():
+                    if key.lower().startswith('en') or 'en' in key.lower().split('-'):
                         chosen_key = key
                         break
 
@@ -102,13 +107,17 @@ def fetch_transcript_from_youtube(video_id: str) -> Optional[str]:
     try:
         print(f"[FETCH] Falling back to standard scraper for: {video_id}")
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+        
+        # Try all major English dialects and Hindi
+        en_codes = ['en', 'en-US', 'en-GB', 'en-CA', 'en-AU', 'en-IN', 'en-IE', 'hi']
         try:
-            transcript_obj = transcript_list.find_transcript(['en', 'hi'])
+            transcript_obj = transcript_list.find_transcript(en_codes)
         except:
             transcript_obj = next(iter(transcript_list))
             
         data = transcript_obj.fetch()
         return " ".join([t['text'] for t in data])
+
         
     except Exception as e:
         print(f"\033[91m[NOTICE]\033[0m Live transcript not fetchable for this video.")

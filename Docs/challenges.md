@@ -13,27 +13,33 @@ This document tracks the comprehensive list of architectural, infrastructure, AP
   ```
 - **Root Cause**: While `yt-dlp` was installed in the local developer virtual environment, it was omitted from [`requirements.txt`](./requirements.txt). The Docker build (`pip install -r requirements.txt`) therefore did not install it.
 - **Solution**: 
-  - Added `yt-dlp` explicitly to [`requirements.txt`](./requirements.txt).
-  - Pinned ffmpeg in [`Dockerfile`](./Dockerfile) (`apt-get install -y ffmpeg`) to ensure yt-dlp has full media and subtitle extraction binaries.
+  - Added `yt-dlp` explicitly to [`requirements.txt`](../requirements.txt).
+  - Pinned Debian's official `ffmpeg` in [`Dockerfile`](../Dockerfile) (`apt-get install -y ffmpeg` compiled from [FFmpeg official sources](https://www.ffmpeg.org/download.html#get-sources)) to ensure `yt-dlp` has full media and subtitle extraction binaries inside the Linux container.
 
 ---
 
-### Challenge 1.2: Cloud Datacenter IP Bot Verification & Captcha Blocks
+### Challenge 1.2: Cloud Datacenter IP Bot Verification ("Sign in to confirm you're not a bot")
 - **Symptom**: Videos extracted without issues locally failed when triggered on Render's cloud servers with:
   ```text
-  ERROR: [youtube] Sign in to confirm you’re not a bot
+  ERROR: [youtube] jXwOcpkMQAA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication.
   ```
-- **Root Cause**: YouTube's anti-scraping systems flag cloud datacenter IP ranges (AWS, GCP, Render Oregon). The default desktop web client scraper in `yt-dlp` is immediately challenged.
+- **Root Cause**: YouTube flags cloud datacenter IP ranges (AWS, GCP, Render Oregon). When `player_client` contained `['android', 'web', 'mweb']`, `yt-dlp` still contacted the desktop `web` client first, instantly triggering YouTube's anti-bot challenge. Additionally, requesting subtitle `json3` streams without Android headers resulted in signature verification failures.
 - **Solution**:
-  - Configured `yt-dlp` with multi-client emulation prioritizing the Android and mobile web APIs:
+  - Configured `yt-dlp` with **exclusive Android player client extraction**:
     ```python
     'extractor_args': {
         'youtube': {
-            'player_client': ['android', 'web', 'mweb']
+            'player_client': ['android']
         }
+    },
+    'http_headers': {
+        'User-Agent': 'com.google.android.youtube/19.29.37 (Linux; U; Android 11; Pixel 5)',
+        'Accept-Language': 'en-US,en;q=0.9',
     }
     ```
-  - Appended authentic browser User-Agent and `Accept-Language` headers to mimic mobile client traffic, bypassing datacenter bot challenges.
+  - Appended matching Android headers directly when fetching the timedtext `json3` subtitle URL.
+  - Upgraded [`Dockerfile`](../Dockerfile) base image from `python:3.10-slim` to `python:3.11-slim` to eliminate YouTube extractor deprecation warnings.
+
 
 ---
 

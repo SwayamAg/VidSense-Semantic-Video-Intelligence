@@ -19,8 +19,11 @@ import {
   BookOpen,
   FileText,
   Zap,
-  Database
+  Database,
+  ChevronDown,
+  MessageSquareCheck
 } from "lucide-react";
+
 
 
 
@@ -439,85 +442,250 @@ export default function Home() {
         <section id="how-it-works" className="w-full max-w-5xl mt-24 text-left scroll-mt-20">
           <div className="text-center sm:text-left mb-8">
             <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">Architecture</span>
-            <h2 className="text-2xl font-bold text-white mt-1">How VidSense Works</h2>
-            <p className="text-xs text-slate-400 mt-1 max-w-xl">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mt-1">How VidSense Works</h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
               A genuine Retrieval-Augmented Generation pipeline connecting raw YouTube audio transcripts to factual LLM answers.
             </p>
           </div>
 
-          <div className="glass-card p-6 rounded-2xl border-white/[0.08]">
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-center">
-              {[
-                { step: "1", title: "YouTube URL", desc: "Metadata & ID resolution" },
-                { step: "2", title: "Transcript", desc: "yt-dlp & timestamp parsing" },
-                { step: "3", title: "Chunking", desc: "1000 char recursive split" },
-                { step: "4", title: "Embeddings", desc: "OpenAI 1536-dim vectors" },
-                { step: "5", title: "FAISS Index", desc: "Sub-millisecond similarity" },
-                { step: "6", title: "Context", desc: "Top-k grounded chunks" },
-                { step: "7", title: "Grounded Answer", desc: "SSE streamed with [MM:SS]" },
-              ].map((item, idx) => (
-                <div key={item.step} className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] flex flex-col items-center">
-                  <span className="h-6 w-6 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold flex items-center justify-center mb-2">
-                    {item.step}
-                  </span>
-                  <span className="text-xs font-semibold text-white">{item.title}</span>
-                  <span className="text-[10px] text-slate-400 mt-1 leading-tight">{item.desc}</span>
+          {/* Grouped 4-Phase Connected Pipeline */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 relative">
+            {/* Phase 01: INGEST */}
+            <div className="glass-card p-5 rounded-2xl flex flex-col justify-between border-white/[0.08] hover:border-purple-500/40 group transition-all">
+              <div>
+                <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] mb-4">
+                  <span className="text-[11px] font-bold text-purple-400 tracking-wider">01 INGEST</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20">Extraction</span>
                 </div>
-              ))}
+
+                {/* Step 1 */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">1. YouTube URL</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 pl-3 border-l border-white/10">Metadata & ID resolution</p>
+                </div>
+
+                {/* Internal Flow Arrow */}
+                <div className="py-2 pl-3 text-slate-600">
+                  <ChevronDown className="h-3.5 w-3.5 text-purple-400/50" />
+                </div>
+
+                {/* Step 2 */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">2. Transcript</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 pl-3 border-l border-white/10">yt-dlp & timestamp parsing</p>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-white/[0.04] text-[10px] text-slate-500 font-mono">
+                Multi-engine caption capture
+              </div>
             </div>
+
+            {/* Phase 02: PREPARE */}
+            <div className="glass-card p-5 rounded-2xl flex flex-col justify-between border-white/[0.08] hover:border-indigo-500/40 group transition-all">
+              <div>
+                <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] mb-4">
+                  <span className="text-[11px] font-bold text-indigo-400 tracking-wider">02 PREPARE</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">Vectorization</span>
+                </div>
+
+                {/* Step 3 */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors">3. Chunking</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 pl-3 border-l border-white/10">1000 char recursive split</p>
+                </div>
+
+                {/* Internal Flow Arrow */}
+                <div className="py-2 pl-3 text-slate-600">
+                  <ChevronDown className="h-3.5 w-3.5 text-indigo-400/50" />
+                </div>
+
+                {/* Step 4 */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors">4. Embeddings</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 pl-3 border-l border-white/10">OpenAI 1536-dim vectors</p>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-white/[0.04] text-[10px] text-slate-500 font-mono">
+                text-embedding-3-small
+              </div>
+            </div>
+
+            {/* Phase 03: RETRIEVE */}
+            <div className="glass-card p-5 rounded-2xl flex flex-col justify-between border-purple-500/30 bg-purple-950/10 hover:border-purple-400/50 group transition-all shadow-lg shadow-purple-950/20">
+              <div>
+                <div className="flex items-center justify-between pb-3 border-b border-purple-500/20 mb-4">
+                  <span className="text-[11px] font-bold text-purple-300 tracking-wider">03 RETRIEVE</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-200 border border-purple-500/30">Semantic Match</span>
+                </div>
+
+                {/* Step 5 */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">5. FAISS Index</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 pl-3 border-l border-white/10">Sub-millisecond similarity</p>
+                </div>
+
+                {/* Internal Flow Arrow */}
+                <div className="py-2 pl-3 text-slate-600">
+                  <ChevronDown className="h-3.5 w-3.5 text-purple-400/50" />
+                </div>
+
+                {/* Step 6 */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">6. Context</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 pl-3 border-l border-white/10">Top-k grounded chunks</p>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-purple-500/20 text-[10px] text-purple-300/80 font-mono">
+                Isolated video vector space
+              </div>
+            </div>
+
+            {/* Phase 04: GENERATE */}
+            <div className="glass-card p-5 rounded-2xl flex flex-col justify-between border-indigo-500/30 bg-indigo-950/10 hover:border-indigo-400/50 group transition-all shadow-lg shadow-indigo-950/20">
+              <div>
+                <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20 mb-4">
+                  <span className="text-[11px] font-bold text-indigo-300 tracking-wider">04 GENERATE</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-200 border border-indigo-500/30">Grounded Output</span>
+                </div>
+
+                {/* Step 7 */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors">7. Grounded Answer</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 pl-3 border-l border-white/10">SSE streamed with [MM:SS]</p>
+                  <div className="mt-2 p-2 rounded-lg bg-slate-950/60 border border-white/[0.08] text-[10px] font-mono text-purple-300 flex items-center justify-between">
+                    <span>&ldquo;...attention...&rdquo;</span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-200 font-bold">[03:42]</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-indigo-500/20 text-[10px] text-indigo-300/80 font-mono">
+                Real-time interactive citations
+              </div>
+            </div>
+          </div>
+
+          {/* Why This Matters Summary Bar */}
+          <div className="mt-4 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+            <Sparkles className="h-3.5 w-3.5 text-purple-400 shrink-0" />
+            <span>From raw video <strong className="text-slate-300 font-medium">→</strong> semantic retrieval <strong className="text-slate-300 font-medium">→</strong> timestamp-grounded answers.</span>
           </div>
         </section>
 
         {/* Use Cases Section */}
-        <section className="w-full max-w-5xl mt-20 text-left">
+        <section className="w-full max-w-5xl mt-24 text-left">
           <div className="text-center sm:text-left mb-8">
             <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Applications</span>
-            <h2 className="text-2xl font-bold text-white mt-1">Built for Deep Comprehension</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mt-1">Built for Deep Comprehension</h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
+              Turn long-form video archives into searchable, contextual knowledge.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-card p-5 rounded-2xl hover:border-purple-500/30 transition-all">
-              <div className="h-8 w-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3">
-                <BookOpen className="h-4 w-4" />
+            {/* 01 Learning */}
+            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border-white/[0.08] hover:border-purple-500/40 transition-all">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-extrabold text-slate-700 font-mono">01</span>
+                  <div className="h-8 w-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                    <BookOpen className="h-4 w-4" />
+                  </div>
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Learning</h3>
+                <p className="text-xs text-slate-300 font-medium leading-snug mb-2">
+                  Understand lectures, tutorials, and courses without watching every minute.
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Ask targeted questions and retrieve relevant moments directly from long-form educational content.
+                </p>
               </div>
-              <h3 className="text-sm font-semibold text-white">Learning</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Ask targeted questions about lectures, tutorials, and courses without scrubbing through hours of video.
-              </p>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl hover:border-indigo-500/30 transition-all">
-              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
-                <Search className="h-4 w-4" />
+            {/* 02 Research */}
+            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border-white/[0.08] hover:border-indigo-500/40 transition-all">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-extrabold text-slate-700 font-mono">02</span>
+                  <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                    <Search className="h-4 w-4" />
+                  </div>
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Research</h3>
+                <p className="text-xs text-slate-300 font-medium leading-snug mb-2">
+                  Locate technical claims, statistics, and verifiable citations instantly.
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Find specific information and relevant sections across long-form video archives with zero manual scrubbing.
+                </p>
               </div>
-              <h3 className="text-sm font-semibold text-white">Research</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Locate specific technical claims, statistics, and citations across long-form video archives.
-              </p>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl hover:border-emerald-500/30 transition-all">
-              <div className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
-                <FileText className="h-4 w-4" />
+            {/* 03 Content Analysis */}
+            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border-white/[0.08] hover:border-emerald-500/40 transition-all">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-extrabold text-slate-700 font-mono">03</span>
+                  <div className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Content Analysis</h3>
+                <p className="text-xs text-slate-300 font-medium leading-snug mb-2">
+                  Extract core frameworks, key arguments, and counter-points systematically.
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Summarize key ideas and compare perspectives from keynotes, interviews, and panel discussions.
+                </p>
               </div>
-              <h3 className="text-sm font-semibold text-white">Content Analysis</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Extract core concepts, frameworks, and counter-arguments systematically from conference talks.
-              </p>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl hover:border-sky-500/30 transition-all">
-              <div className="h-8 w-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3">
-                <Zap className="h-4 w-4" />
+            {/* 04 Quick Understanding */}
+            <div className="glass-card p-6 rounded-2xl flex flex-col justify-between border-white/[0.08] hover:border-sky-500/40 transition-all">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-extrabold text-slate-700 font-mono">04</span>
+                  <div className="h-8 w-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+                    <Zap className="h-4 w-4" />
+                  </div>
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Quick Understanding</h3>
+                <p className="text-xs text-slate-300 font-medium leading-snug mb-2">
+                  Get rapid, grounded takeaways when there isn&apos;t time to watch the complete video.
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Transform 60-minute presentations into concise, factual answers with one-click timestamp seeking.
+                </p>
               </div>
-              <h3 className="text-sm font-semibold text-white">Quick Understanding</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Get rapid, trustworthy answers when you need the core insight and don&apos;t have time to watch the full video.
-              </p>
             </div>
+          </div>
+
+          {/* Compact Closing Statement */}
+          <div className="mt-8 text-center">
+            <p className="text-xs text-slate-500 font-medium tracking-wide uppercase">
+              One video. Your questions. Grounded answers.
+            </p>
           </div>
         </section>
       </main>
+
 
 
       {/* Professional Product & Portfolio Footer */}

@@ -39,14 +39,15 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         'no_warnings': True,
         'extractor_args': {
             'youtube': {
-                'player_client': ['android', 'web', 'mweb']
+                'player_client': ['android']
             }
         },
         'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+            'User-Agent': 'com.google.android.youtube/19.29.37 (Linux; U; Android 11; Pixel 5)',
             'Accept-Language': 'en-US,en;q=0.9',
         }
     }
+
 
     
     try:
@@ -79,8 +80,13 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                 formats = subtitles[chosen_key]
                 json_fmt = next((f['url'] for f in formats if f.get('ext') == 'json3'), None)
                 if json_fmt:
-                    resp = requests.get(json_fmt, timeout=10)
+                    sub_headers = {
+                        'User-Agent': 'com.google.android.youtube/19.29.37 (Linux; U; Android 11; Pixel 5)',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                    }
+                    resp = requests.get(json_fmt, headers=sub_headers, timeout=10)
                     if resp.status_code == 200:
+
                         data = resp.json()
                         formatted_events = []
                         for event in data.get('events', []):

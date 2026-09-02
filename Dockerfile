@@ -1,5 +1,6 @@
 # Production Dockerfile for YouTube RAG Bot API
-FROM python:3.10-slim
+FROM python:3.11-slim
+
 
 # Prevent Python from writing .pyc files and buffer stdout/stderr
 ENV PYTHONDONTWRITEBYTECODE=1

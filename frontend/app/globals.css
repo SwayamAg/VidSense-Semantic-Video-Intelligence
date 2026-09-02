@@ -69,3 +69,18 @@ body {
 .glow-purple {
   box-shadow: 0 0 50px -10px rgba(168, 85, 247, 0.25);
 }
+
+/* Subtle micro-interactions */
+button, a {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card {
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(168, 85, 247, 0.25);
+  transform: translateY(-1px);
+}
+

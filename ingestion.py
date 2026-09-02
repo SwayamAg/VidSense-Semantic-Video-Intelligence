@@ -43,31 +43,45 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
             if not subtitles:
                 return None
                 
-            # Pick the first available English/Hindi subtitle
-            for lang in ['en', 'en-US', 'hi']:
+            # Pick the first available English/Hindi subtitle (including en-orig, en, hi)
+            target_langs = ['en-orig', 'en', 'en-US', 'en-GB', 'hi']
+            chosen_key = None
+            for lang in target_langs:
                 for key in subtitles.keys():
-                    if key.startswith(lang):
-                        # Get the JSON format URL if available, else VTT
-                        formats = subtitles[key]
-                        json_fmt = next((f['url'] for f in formats if f.get('ext') == 'json3'), None)
-                        if json_fmt:
-                            resp = requests.get(json_fmt)
-                            if resp.status_code == 200:
-                                data = resp.json()
-                                formatted_events = []
-                                for event in data.get('events', []):
-                                    if 'segs' in event and 'tStartMs' in event:
-                                        # Convert ms to M:SS or H:MM:SS
-                                        ms = event['tStartMs']
-                                        s = ms // 1000
-                                        m, s = divmod(s, 60)
-                                        h, m = divmod(m, 60)
-                                        time_str = f"{h}:{m:02d}:{s:02d}" if h > 0 else f"{m:02d}:{s:02d}"
-                                        
-                                        text = "".join([seg['utf8'] for seg in event['segs'] if 'utf8' in seg])
-                                        formatted_events.append(f"[{time_str}] {text}")
-                                
-                                return " ".join(formatted_events)
+                    if key.lower() == lang.lower() or key.lower().startswith(lang.lower()):
+                        chosen_key = key
+                        break
+                if chosen_key:
+                    break
+
+            if not chosen_key:
+                # Fallback to any key with 'en' in it
+                for key in subtitles.keys():
+                    if 'en' in key.lower():
+                        chosen_key = key
+                        break
+
+            if chosen_key:
+                formats = subtitles[chosen_key]
+                json_fmt = next((f['url'] for f in formats if f.get('ext') == 'json3'), None)
+                if json_fmt:
+                    resp = requests.get(json_fmt, timeout=10)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        formatted_events = []
+                        for event in data.get('events', []):
+                            if 'segs' in event and 'tStartMs' in event:
+                                ms = event['tStartMs']
+                                s = ms // 1000
+                                m, s = divmod(s, 60)
+                                h, m = divmod(m, 60)
+                                time_str = f"{h}:{m:02d}:{s:02d}" if h > 0 else f"{m:02d}:{s:02d}"
+                                text = "".join([seg['utf8'] for seg in event['segs'] if 'utf8' in seg])
+                                if text.strip():
+                                    formatted_events.append(f"[{time_str}] {text.strip()}")
+                        if formatted_events:
+                            return " ".join(formatted_events)
+
         return None
     except Exception as e:
         print(f"[WARNING] yt-dlp extraction failed: {e}")

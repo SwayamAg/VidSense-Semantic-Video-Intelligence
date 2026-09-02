@@ -16,11 +16,10 @@
 
 ## 🌐 Live Demo
 
-🚀 **Experience the Full Workspace**: [**yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app**](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
-
-*(Backend API endpoints and Swagger URLs are documented in [`DEPLOYMENT.md`](./DEPLOYMENT.md))*
+🚀 **Interactive AI Research Workspace**: [**https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/**](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
 
 ---
+
 
 
 ## 📸 Interactive Workspace Preview
@@ -208,18 +207,6 @@ docker compose up --build
 
 ---
 
-## 🚀 Production Deployment Options
-
-Detailed step-by-step instructions for all three platforms are in [**`DEPLOYMENT.md`**](./DEPLOYMENT.md):
-
-| Platform | Setup | Configuration File |
-| :--- | :--- | :--- |
-| **Vercel + Render / Railway** | Split Frontend (Vercel) + Backend (Render/Railway) | [`render.yaml`](./render.yaml) & [`frontend/vercel.json`](./frontend/vercel.json) |
-| **Cloud VPS (All-in-One)** | Single Server Docker Compose with Nginx Reverse Proxy | [`docker-compose.prod.yml`](./docker-compose.prod.yml) & [`nginx/nginx.conf`](./nginx/nginx.conf) |
-| **Hugging Face Spaces** | Free Docker Space hosting the FastAPI API & Swagger | [`Dockerfile`](./Dockerfile) (Auto-ports `7860` / `8000`) |
-
----
-
 
 ## 🌐 REST API Reference
 
@@ -300,9 +287,5 @@ TIMESTAMPS:
 - **Name**: Swayam Agarwal  
 - **LinkedIn**: [linkedin.com/in/swayam-agarwal](https://www.linkedin.com/in/swayam-agarwal/)  
 - **GitHub**: [github.com/SwayamAg](https://github.com/SwayamAg)  
-- **Email**: swayamagarwal19@gmail.com  
+- **Email**: swayamagarwal19@gmail.com
 
----
-
-## 📄 License
-This project is licensed under the **MIT License**.

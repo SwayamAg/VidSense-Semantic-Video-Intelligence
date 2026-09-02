@@ -77,12 +77,13 @@ export default function VideoPane({
         <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950">
           <iframe
             ref={iframeRef}
-            src={`https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}&rel=0`}
+            src={`https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&rel=0`}
             title="YouTube video player"
             className="w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
+
         </div>
       </div>
 

@@ -20,10 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} h-full dark`}>
-      <body className="min-h-full flex flex-col bg-[#080b14] text-slate-100 selection:bg-purple-500/30 selection:text-purple-200">
+    <html lang="en" className={`${inter.variable} h-full dark`} suppressHydrationWarning>
+      <body 
+        className="min-h-full flex flex-col bg-[#080b14] text-slate-100 selection:bg-purple-500/30 selection:text-purple-200"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>
   );
+
 }

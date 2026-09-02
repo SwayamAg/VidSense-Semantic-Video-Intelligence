@@ -1,8 +1,11 @@
-# 📺 YT-RAG Bot: Semantic Video Intelligence
+# 📺 YT-RAG Bot: Semantic Video Intelligence & AI Research Workspace
 
-> **Production-ready, containerized RAG pipeline and FastAPI service turning any YouTube video into an interactive, timestamp-grounded knowledge engine.**
+> **Full-stack, containerized AI video intelligence engine turning any YouTube video into an interactive, timestamp-grounded knowledge base with Next.js App Router, FastAPI, and FAISS.**
 
 ![Python](https://img.shields.io/badge/python-3.10-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)
 ![LangChain](https://img.shields.io/badge/langchain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/openai-412991?style=for-the-badge&logo=openai&logoColor=white)
@@ -11,26 +14,17 @@
 
 ---
 
-## 📸 Demo Preview
+## 📸 Interactive Workspace Preview
 
 ```text
-======================================================================
-   📺 YOUTUBE TRANSCRIPT RAG - SMART CHAT (CLI & REST API)
-======================================================================
-Target Video: What's The Most Expensive Thing Ever?
-Target ID:    jXwOcpkMQAA
-
-You >> What is the most expensive substance mentioned and how is it made?
-Assistant:
-OVERVIEW: Antimatter is presented as the most expensive substance in existence.
-
-TECHNICAL HIGHLIGHTS:
-- A single gram releases energy equivalent to three Hiroshima nuclear bombs.
-- Production requires particle acceleration: firing particles into metal rods under vacuum.
-
-TIMESTAMPS:
-- [07:37] - Introduction to antimatter and energy potential.
-- [08:10] - Physical production challenges and particle acceleration.
+========================================================================================
+   📺 YT-RAG BOT: 3-PANE SEMANTIC VIDEO INTELLIGENCE WORKSPACE
+========================================================================================
+[Left Pane: Video Player]     [Center Pane: AI Research Chat]       [Right: Knowledge]
+- Responsive YouTube IFrame   - Real-Time SSE Token Streaming       - FAISS Similarity (k=4)
+- Live Seek to Exact Second   - Interactive [▶ MM:SS] Pill Badges   - Full Subtitle Viewer
+- One-Click Transcript Jump   - One-Click Answer Copying            - Cached Video Library
+========================================================================================
 ```
 
 ---
@@ -43,23 +37,27 @@ TIMESTAMPS:
 ---
 
 ## 💡 Solution Overview
-**YT-RAG Bot** automates transcript extraction with a triple-redundant ingestion pipeline (`yt-dlp` → `youtube-transcript-api` → local fallback), injects fine-grained `[MM:SS]` timestamps, and builds persistent video-isolated FAISS vector databases. It exposes both an **interactive CLI** and a **FastAPI REST API** with full Docker support.
+**YT-RAG Bot** combines a triple-redundant ingestion pipeline (`yt-dlp` → `youtube-transcript-api` → local fallback) with isolated FAISS vector indexing and an interactive **3-Pane Next.js Research Workspace**. Every AI claim is grounded in verifiable timestamps; clicking any citation `[▶ MM:SS]` automatically seeks the embedded video player to that exact moment.
 
 ---
 
 ## 📈 Business & Engineering Impact
 - ⚡ **95% Time Saved**: Retrieve timestamped answers from hour-long videos in sub-seconds.
+- ⏱️ **Zero Waiting (SSE Streaming)**: Sub-second Time-to-First-Token (TTFT) via Server-Sent Events.
 - 🛡️ **Near-100% Ingestion Reliability**: Fallback hierarchy eliminates single points of failure in video data acquisition.
 - 💰 **Zero-Redundancy Compute**: Vector indices are persisted locally; previously ingested videos cost $0 in repeat embedding tokens.
-- 🔌 **Decoupled Architecture**: REST backend is ready to power Streamlit, Gradio, React, Chrome extensions, or Slack/Discord bots.
+- 🔌 **Full-Stack Architecture**: Clean decoupling between Next.js frontend, FastAPI backend, and persistent FAISS storage.
 
 ---
 
 ## 🚀 Key Features
+
+- 🖥️ **3-Pane Next.js AI Workspace**: Synchronized layout with Embedded Video Player, Streaming AI Chat, and Retrieved Knowledge.
+- 🎬 **Clickable Video Citations**: Clicking any `[▶ MM:SS]` badge in the chat, sources, or transcript automatically commands the YouTube player to jump and play.
+- ⚡ **Real-Time Token Streaming (SSE)**: Powered by FastAPI `StreamingResponse` and LangChain `chain.stream()` for sub-second responses.
+- 📄 **Full Searchable Transcript Modal**: Filter and read through every spoken line of the video with instant playback jumping.
+- 🗄️ **Indexed Video Library Drawer**: Switch between previously ingested video knowledge bases on disk with 1 click.
 - 🛡️ **Triple-Redundancy Ingestion Engine**: Automatic failover between `yt-dlp`, standard scraper, and local fallback files.
-- ⏱️ **Temporal Timestamp Citations**: Embeds `[MM:SS]` markers throughout the vector space for verifiable video citations.
-- 🔍 **Vector Index Isolation**: Separate FAISS storage per video ID prevents cross-contamination of knowledge bases.
-- 🌐 **Production FastAPI REST API**: Comprehensive OpenAPI/Swagger endpoints for info, ingestion, search, and chat.
 - 🐳 **Full Dockerization**: One-command deployment with Docker and Docker Compose with persistent volume mounts.
 
 ---
@@ -68,16 +66,16 @@ TIMESTAMPS:
 
 ```mermaid
 graph LR
-    A["🎬 YouTube URL / ID"] --> B["⚙️ Triple Ingestion\n(yt-dlp / Scraper / Fallback)"]
+    A["🎬 YouTube URL"] --> B["⚙️ Ingestion Engine\n(yt-dlp / Scraper)"]
     B --> C["✂️ Recursive Splitter\n(Chunk=1000, Overlap=200)"]
     C --> D["🧠 OpenAI Embeddings\n(text-embedding-3-small)"]
     D --> E[("🗄️ FAISS Vector Store\n(Persisted by Video ID)")]
 
-    F["👤 User Query"] --> G["🔍 Similarity Search (k=4)"]
+    F["💻 Next.js Frontend\n(3-Pane Workspace)"] --> G["⚡ FastAPI Backend\n(/chat/stream)"]
     E --> G
-    G --> H["📝 Prompt with [MM:SS] Context"]
-    H --> I["🤖 OpenAI Chat Model\n(gpt-4o-mini / gpt-4o)"]
-    I --> J["✅ Timestamped Structured Response"]
+    G --> H["🤖 OpenAI Chat Model\n(gpt-4o-mini)"]
+    H -->|SSE Stream| F
+    F -->|Seek Command| I["📺 YouTube Player\n(Jumps to [MM:SS])"]
 
     classDef source fill:#3b1f4a,stroke:#c678dd,color:#f0e6ff
     classDef process fill:#1a3340,stroke:#56b6c2,color:#e0f4f8
@@ -88,8 +86,8 @@ graph LR
     class A,F source
     class B,C process
     class D,E storage
-    class G,H,I rag
-    class J output
+    class G,H rag
+    class I output
 ```
 
 ---
@@ -98,7 +96,9 @@ graph LR
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Backend API** | [FastAPI](https://fastapi.tiangolo.com/) + [Uvicorn](https://www.uvicorn.org/) | High-performance asynchronous REST API |
+| **Frontend** | [Next.js 16 (App Router)](https://nextjs.org/) + [TypeScript](https://www.typescriptlang.org/) | Modern 3-pane research workspace with responsive UI |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) + [Lucide Icons](https://lucide.dev/) | Dark glassmorphism, glowing accents, and micro-interactions |
+| **Backend API** | [FastAPI](https://fastapi.tiangolo.com/) + [Uvicorn](https://www.uvicorn.org/) | High-performance asynchronous REST & SSE streaming server |
 | **Orchestration** | [LangChain](https://www.langchain.com/) (LCEL) | Declarative RAG chaining and prompt templates |
 | **LLM & Embeddings** | [OpenAI API](https://openai.com/) | `gpt-4o-mini` & `text-embedding-3-small` (1536 dims) |
 | **Vector DB** | [FAISS](https://github.com/facebookresearch/faiss) | In-memory similarity search with local disk serialization |
@@ -107,48 +107,48 @@ graph LR
 
 ---
 
-## 🔄 Runtime Workflow
-
-1. **Request Received**: User provides YouTube URL or Video ID via CLI or REST API.
-2. **Metadata Resolution**: Fast oEmbed lookup extracts clean video title and checks local index cache.
-3. **Ingestion & Indexing**: Subtitles are fetched with `yt-dlp`, split into timestamped segments, and vectorized via FAISS.
-4. **Context Retrieval**: Query undergoes similarity search against the video-specific FAISS index.
-5. **Grounded Generation**: OpenAI model synthesizes answer strictly using retrieved context with temporal citations.
-
----
-
 ## 📁 Project Structure
 
 ```text
 YT-RAG_BOT/
-├── app/                      # FastAPI Service Layer
+├── app/                              # FastAPI Service Layer
 │   ├── api/
-│   │   └── routes.py         # REST Endpoints (/health, /info, /ingest, /chat, /search, /indexes)
+│   │   └── routes.py                 # REST & SSE Endpoints (/stream, /chat, /search, /transcript)
 │   ├── models/
-│   │   └── schemas.py        # Pydantic Request/Response Models
+│   │   └── schemas.py                # Pydantic Request/Response Models
 │   ├── services/
-│   │   └── rag_service.py    # Business Logic Decoupling Layer
-│   └── main.py               # FastAPI App Entrypoint & Middleware
-├── config.py                 # Central Configuration & OpenAI Factories
-├── ingestion.py              # Triple-Redundancy ETL Pipeline
-├── rag_chain.py              # LCEL RAG Prompt & Pipeline Assembly
-├── utils.py                  # Regex Extractors & oEmbed Helpers
-├── main.py                   # Interactive Terminal CLI
-├── debug_openai.py           # OpenAI API Diagnostic Script
-├── debug_youtube.py          # YouTube Scraper Diagnostic Script
-├── test_api.py               # Automated FastAPI Integration Test Suite
-├── test_check.py             # Quick End-to-End Verification
-├── Dockerfile                # Production Container Definition
-├── docker-compose.yml        # Multi-service Container Orchestration
-├── requirements.txt          # Pinned Python Dependencies
-└── .env.example              # Environment Variable Template
+│   │   └── rag_service.py            # Business Logic & SSE Generator Layer
+│   └── main.py                       # FastAPI App Entrypoint, CORS & Lifespan
+├── frontend/                         # Next.js Full-Stack Workspace
+│   ├── app/
+│   │   ├── layout.tsx                # Inter Typography & Dark Theme Root
+│   │   ├── page.tsx                  # Ingestion Landing Page & Health Indicator
+│   │   └── workspace/page.tsx        # 3-Pane AI Research Workspace Route
+│   ├── components/
+│   │   ├── video/VideoPane.tsx       # Embedded Synced YouTube Player
+│   │   ├── video/TranscriptModal.tsx # Full Searchable Transcript Viewer
+│   │   ├── chat/ChatPane.tsx         # Real-Time SSE Chat with [▶ MM:SS] Pills
+│   │   ├── knowledge/KnowledgePane.tsx # Raw Semantic Vector Search
+│   │   └── navigation/VideoLibraryDrawer.tsx # Disk Index Library Drawer
+│   └── lib/
+│       ├── api.ts                    # Typed API Client & SSE Stream Consumer
+│       └── utils.ts                  # Class Merging & Timestamp Parser
+├── config.py                         # Central Configuration & OpenAI Factories
+├── ingestion.py                      # Triple-Redundancy ETL Pipeline
+├── rag_chain.py                      # LCEL RAG Prompt & Pipeline Assembly
+├── utils.py                          # Regex Extractors & oEmbed Helpers
+├── main.py                           # Interactive Terminal CLI
+├── Dockerfile                        # Production Backend Container
+├── docker-compose.yml                # Multi-service Container Orchestration
+├── requirements.txt                  # Pinned Python Dependencies
+└── .env.example                      # Environment Variable Template
 ```
 
 ---
 
-## ⚡ Quick Start
+## ⚡ How to Run
 
-### 1. Clone & Configure
+### 1. Configure Environment
 ```bash
 git clone https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence.git
 cd YT-RAG-Bot-Semantic-Video-Intelligence
@@ -164,28 +164,36 @@ OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 
 ---
 
-### 2. Option A: Run via Docker (Recommended)
-```bash
-docker compose up --build
+### 2. Start the Backend (FastAPI)
+
+```powershell
+# Windows
+.\.venv\Scripts\activate
+uvicorn app.main:app --reload --port 8000
+
+# Linux / Mac
+source .venv/bin/activate
+uvicorn app.main:app --reload --port 8000
 ```
-- Interactive Swagger Documentation: **`http://localhost:8000/docs`**
-- Healthcheck Endpoint: **`http://localhost:8000/health`**
+- Swagger API Docs: **`http://localhost:8000/docs`**
+- Healthcheck: **`http://localhost:8000/health`**
 
 ---
 
-### 3. Option B: Run Locally
+### 3. Start the Frontend (Next.js)
 
 ```bash
-# Setup virtual environment
-python -m venv .venv
-.\.venv\Scripts\activate      # Windows (or source .venv/bin/activate on Linux/Mac)
-pip install -r requirements.txt
+cd frontend
+npm install
+npm run dev
+```
+Open **`http://localhost:3000`** in your browser!
 
-# Run FastAPI Server
-uvicorn app.main:app --reload --port 8000
+---
 
-# OR Run Interactive CLI
-python main.py
+### 4. Or Run via Docker
+```bash
+docker compose up --build
 ```
 
 ---
@@ -198,22 +206,18 @@ python main.py
 | `POST` | `/api/v1/video/info` | Inspect video ID, title, and disk cache status |
 | `POST` | `/api/v1/ingest` | Ingest and vectorize a video transcript into FAISS |
 | `POST` | `/api/v1/chat` | Primary RAG Q&A generating timestamp-grounded answers |
+| `POST` | `/api/v1/chat/stream` | **Real-time SSE token stream** for low-latency chat |
 | `POST` | `/api/v1/search` | Raw semantic similarity search returning top-K chunks |
-| `GET` | `/api/v1/indexes` | List all persisted video vector indices |
+| `GET` | `/api/v1/video/{video_id}/transcript` | Get full timestamped transcript segments |
+| `GET` | `/api/v1/indexes` | List all persisted video vector indices on disk |
 | `DELETE` | `/api/v1/indexes/{video_id}` | Purge a cached vector index from disk |
 
 ---
 
-## 💬 Verified Example Input & Output
+## 💬 Verified Example Q&A Output
 
 **Video**: *[What's The Most Expensive Thing Ever? (jXwOcpkMQAA)](https://www.youtube.com/watch?v=jXwOcpkMQAA)*
 
-### Sample Q&A Test Performed on System:
-
-#### Question:
-> *"What is the most expensive substance mentioned, its energy release, and how is it produced?"*
-
-#### Output:
 ```text
 OVERVIEW:
 Antimatter is discussed as the most expensive substance in existence.
@@ -234,33 +238,20 @@ TIMESTAMPS:
 
 ---
 
-## 🔒 Security & Limitations
-- **Secret Management**: API keys are strictly read from environment variables; `.env` is ignored by `.gitignore` and `.dockerignore`.
-- **Deserialization Security**: FAISS deserialization is constrained to locally generated directory structures.
-- **Language Scope**: Multi-language caption parsing natively handles English (`en.*`) and Hindi (`hi.*`) with automatic caption fallback.
-
----
-
 ## 🔮 Future Scope & Roadmap
 
 > 📖 **Full-Stack AI Architecture & Evolution Plan**: For the complete technical ideation, UI design wireframes (Next.js + `assistant-ui` + shadcn/ui), RAG evaluation (Ragas), and multi-video research roadmap, see the [Full-Stack Ideation Document](./Ideation.md).
 
-- **💻 Full-Stack AI Research Workspace (Next.js + assistant-ui + shadcn/ui)**
-  - *Why/When*: Transitioning from CLI/REST to a 3-pane interactive research workspace (Video Player + Streaming AI Chat + Timestamp Citations & Topics Panel).
 - **🔀 Hybrid Search + Re-ranking (Dense + BM25 + FlashRank)**
-  - *Why/When*: Pure vector search can miss exact keywords, numbers, or technical jargon (e.g., `"GPT-4o"`, `"CUDA 12.1"`). Combining FAISS with **BM25** and a local cross-encoder re-ranker boosts retrieval precision by ~30%.
+  - *Why/When*: Combining FAISS with **BM25** and a local cross-encoder re-ranker boosts retrieval precision for technical keywords by ~30%.
 - **📊 RAG Quality & Evaluation (Ragas Framework)**
-  - *Why/When*: Measuring Faithfulness, Answer Relevance, and Context Precision systematically across chunking/prompt iterations instead of relying solely on manual evaluation.
+  - *Why/When*: Systematic measurement of Faithfulness, Answer Relevance, and Context Precision across prompt and chunking iterations.
 - **🎬 Multi-Modal Video RAG (Visual Keyframe Search)**
-  - *Why/When*: Technical videos frequently show slides, diagrams, and code not spoken aloud. Sampling keyframes and indexing with **ColPali** or **CLIP / Vision LLMs** allows querying on-screen visuals.
+  - *Why/When*: Technical videos show slides, architecture diagrams, and code snippets not spoken in audio. Sampling keyframes with **ColPali** or **CLIP** indexes visual data.
 - **🎙️ Speaker Diarization (Who Spoke When)**
-  - *Why/When*: Multi-speaker podcasts and panels blur speaker context. Integrating `whisperx` / `pyannote.audio` tags segments (e.g., `[Host]` vs. `[Guest]`) for speaker-targeted queries.
+  - *Why/When*: Multi-speaker podcasts blur speaker context. Integrating `whisperx` / `pyannote.audio` tags segments (e.g., `[Host]` vs. `[Guest]`).
 - **⚡ Google TurboQuant / TurboVec / Qdrant Scaling**
-  - *Why/When*: When scaling from single videos to indexing thousands of channel archives, TurboQuant achieves **~8x memory compression**, and Qdrant provides managed multi-tenant persistence.
-- **🌊 Real-time Token Streaming (SSE / WebSockets)**
-  - *Why/When*: Delivers sub-second Time-To-First-Token (TTFT) for low-latency conversational UX.
-
-
+  - *Why/When*: When scaling to thousands of videos, TurboQuant provides **~8x memory compression**, and Qdrant provides distributed cloud vector persistence.
 
 ---
 

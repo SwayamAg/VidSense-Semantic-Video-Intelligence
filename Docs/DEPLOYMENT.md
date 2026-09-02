@@ -18,6 +18,7 @@ This gives you **automatic CI/CD**, zero server maintenance, global Edge caching
 3. Render will automatically detect [`render.yaml`](./render.yaml).
 4. In the **Environment Variables** prompt, add:
    - `OPENAI_API_KEY`: Your OpenAI API key (`sk-...`).
+   - `YOUTUBE_API_KEY` *(Optional)*: Your Google Cloud YouTube Data API v3 key.
 5. Click **Apply**.
 6. **Live Backend Swagger URL**: [https://yt-rag-bot-semantic-video-intelligence.onrender.com/docs](https://yt-rag-bot-semantic-video-intelligence.onrender.com/docs)
 

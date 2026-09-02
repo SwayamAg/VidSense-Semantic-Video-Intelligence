@@ -40,8 +40,24 @@ This document tracks the comprehensive list of architectural, infrastructure, AP
   - Appended matching Android headers directly when fetching the timedtext `json3` subtitle URL.
   - Upgraded [`Dockerfile`](../Dockerfile) base image from `python:3.10-slim` to `python:3.11-slim` to eliminate YouTube extractor deprecation warnings.
 
+---
+
+### Challenge 1.2b: YouTube Data API v3 `captions.download` OAuth2 Requirement
+- **Symptom**: Attempting to bypass scraping blocks using Google's official YouTube Data API v3 key succeeded on `captions.list` (HTTP 200) but failed on `captions.download` with:
+  ```json
+  {
+    "error": {
+      "code": 401,
+      "message": "API keys are not supported by this API. Expected OAuth2 access token or other authentication credentials that assert a principal."
+    }
+  }
+  ```
+- **Root Cause**: Google Cloud enforces an OAuth2 requirement on `captions.download`. While public metadata and track lists are accessible via API keys, actual caption file downloads require OAuth2 tokens belonging to the authorized channel owner.
+- **Solution**:
+  - Implemented multi-stage ingestion: `yt-dlp` Android client first, official API metadata validation second, followed by proxy/session cookie support (`--cookies-from-browser` or `YOUTUBE_COOKIES` environment variable) for enterprise cloud deployments.
 
 ---
+
 
 ### Challenge 1.3: YouTube Language Tag Variations (`en-orig`, `en-US`, Dialects)
 - **Symptom**: Subtitle scraping for certain videos (e.g. `0_Gp86bvGmQ`) returned `None`, triggering the fallback even though English auto-generated subtitles existed on the video.

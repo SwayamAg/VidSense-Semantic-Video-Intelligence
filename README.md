@@ -172,12 +172,16 @@ cd YT-RAG-Bot-Semantic-Video-Intelligence
 cp .env.example .env
 ```
 
-Add your OpenAI key to `.env`:
+Add your API keys to `.env`:
 ```env
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4o-mini
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+
+# Optional: Google Cloud YouTube Data API v3 Key
+YOUTUBE_API_KEY=AIzaSy...
 ```
+
 
 ---
 

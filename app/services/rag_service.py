@@ -133,12 +133,16 @@ class RAGService:
     def get_transcript(cls, url_or_id: str) -> Dict[str, Any]:
         """Returns the full raw transcript segments with timestamps for a video."""
         import re
-        from ingestion import fetch_transcript_from_youtube, fetch_transcript_from_local
+        from ingestion import fetch_transcript_from_youtube
 
         video_id = cls.resolve_video_id(url_or_id)
         title = get_video_title(video_id)
 
-        raw = fetch_transcript_from_youtube(video_id) or fetch_transcript_from_local() or ""
+        try:
+            raw = fetch_transcript_from_youtube(video_id)
+        except Exception:
+            raw = ""
+
         
         # Parse segments like [00:15] text
         segments = []

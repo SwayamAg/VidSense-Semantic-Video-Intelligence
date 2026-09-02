@@ -238,20 +238,32 @@ TIMESTAMPS:
 
 ---
 
-## 🔮 Future Scope & Roadmap
+## 🔮 Future Scope & Evolution Roadmap
 
-> 📖 **Full-Stack AI Architecture & Evolution Plan**: For the complete technical ideation, UI design wireframes (Next.js + `assistant-ui` + shadcn/ui), RAG evaluation (Ragas), and multi-video research roadmap, see the [Full-Stack Ideation Document](./Ideation.md).
+> 📖 **Full Architectural Ideation**: For the complete technical ideation, UI design wireframes (`assistant-ui` + shadcn/ui), RAG evaluation methodology, and multi-video research roadmap, see the [Full-Stack Ideation Document](./Ideation.md).
 
-- **🔀 Hybrid Search + Re-ranking (Dense + BM25 + FlashRank)**
-  - *Why/When*: Combining FAISS with **BM25** and a local cross-encoder re-ranker boosts retrieval precision for technical keywords by ~30%.
-- **📊 RAG Quality & Evaluation (Ragas Framework)**
-  - *Why/When*: Systematic measurement of Faithfulness, Answer Relevance, and Context Precision across prompt and chunking iterations.
-- **🎬 Multi-Modal Video RAG (Visual Keyframe Search)**
-  - *Why/When*: Technical videos show slides, architecture diagrams, and code snippets not spoken in audio. Sampling keyframes with **ColPali** or **CLIP** indexes visual data.
-- **🎙️ Speaker Diarization (Who Spoke When)**
-  - *Why/When*: Multi-speaker podcasts blur speaker context. Integrating `whisperx` / `pyannote.audio` tags segments (e.g., `[Host]` vs. `[Guest]`).
-- **⚡ Google TurboQuant / TurboVec / Qdrant Scaling**
-  - *Why/When*: When scaling to thousands of videos, TurboQuant provides **~8x memory compression**, and Qdrant provides distributed cloud vector persistence.
+### 🎯 V2 — Retrieval Quality & Intelligence (In Progress)
+- **🔀 Hybrid Search + Late-Interaction Reranking (`Dense + BM25 + FlashRank`)**
+  - *Why*: Dense vector search can overlook exact technical identifiers (e.g., model weights, specific code flags, numbers).
+  - *Implementation*: Run dense FAISS embeddings alongside sparse BM25, combine candidate pools with Reciprocal Rank Fusion (RRF), and score top-20 with a FlashRank cross-encoder.
+- **📊 Quantitative RAG Evaluation (Ragas Framework)**
+  - *Why*: Systematically track Faithfulness, Answer Relevance, Context Precision, and Recall@K across chunk size variations (500 vs. 1000) and prompt adjustments instead of subjective testing.
+- **📑 Automated Chapter & Timeline Detection**
+  - *Why*: Provide an auto-generated structural outline of long lectures, allowing users to skim topics before querying.
+  - *Implementation*: LLM-driven transcript segmentation clustering timestamps into thematic topic milestones.
+
+### 🚀 V3 — Multi-Modal & Large-Scale Expansion
+- **🎬 Multi-Modal Video RAG (On-Screen Keyframe Retrieval)**
+  - *Why*: Complex technical videos contain terminal output, slide decks, and architecture diagrams never read aloud.
+  - *Implementation*: Keyframe extraction at scene transitions, indexed with **ColPali** or **CLIP / Vision Embeddings**, allowing queries against on-screen code.
+- **🎙️ Speaker Diarization (`whisperx` / `pyannote.audio`)**
+  - *Why*: In podcasts and debates, attributing statements correctly (e.g., *"What did the guest say about transformers?"*) requires speaker identification tags (`[Host]` vs. `[Guest]`).
+- **⚡ Google TurboQuant / TurboVec / Qdrant Enterprise Scaling**
+  - *Why*: Scaling from local single-video indices to indexing full YouTube channels (1,000+ videos).
+  - *Implementation*: TurboQuant provides **~8x memory compression** for high-dimensional vectors, while Qdrant provides managed multi-tenant cloud vector storage with payload filtering.
+- **📚 Multi-Video Workspace Research**
+  - *Why*: Query across playlist archives or related technical lectures simultaneously with cross-video synthesis.
+
 
 ---
 

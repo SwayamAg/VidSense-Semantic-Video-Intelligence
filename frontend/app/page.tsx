@@ -285,31 +285,43 @@ export default function Home() {
             </div>
 
 
-            {/* Structured Error banner */}
+            {/* Comprehensive Structured Error Banner */}
             {errorMessage && (
               <div className="p-4 mb-5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs flex items-start gap-3 animate-in fade-in duration-200">
                 <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
-                <div className="space-y-1">
+                <div className="space-y-1.5 flex-1">
                   <div className="font-semibold text-red-300">
-                    {errorMessage.toLowerCase().includes("failed to fetch") || errorMessage.toLowerCase().includes("network")
-                      ? "FastAPI Backend Connection Error"
-                      : errorMessage.toLowerCase().includes("subtitles") || errorMessage.toLowerCase().includes("transcript")
-                      ? "YouTube Transcript Access Restricted"
-                      : "Ingestion Pipeline Error"}
+                    {(() => {
+                      const msg = errorMessage.toLowerCase();
+                      if (msg.includes("failed to fetch") || msg.includes("network") || msg.includes("connection")) return "FastAPI Backend Connection Error";
+                      if (msg.includes("rate-limited") || msg.includes("429") || msg.includes("too many requests") || msg.includes("bot")) return "YouTube Cloud Rate-Limit / Bot Challenge";
+                      if (msg.includes("age") || msg.includes("private") || msg.includes("sign in")) return "Video Privacy or Age Restricted";
+                      if (msg.includes("not found") || msg.includes("invalid") || msg.includes("deleted")) return "Invalid / Deleted YouTube Video";
+                      if (msg.includes("live")) return "Live Stream Transcript Not Finalized";
+                      if (msg.includes("openai") || msg.includes("quota") || msg.includes("api key")) return "OpenAI Service / Quota Error";
+                      if (msg.includes("subtitles") || msg.includes("transcript") || msg.includes("captions")) return "YouTube Transcript Access Restricted";
+                      return "Ingestion Pipeline Diagnostic Alert";
+                    })()}
                   </div>
-                  <p className="text-red-300/90 leading-relaxed">
+                  <p className="text-red-300/90 leading-relaxed font-mono text-[11px] bg-red-950/40 px-2.5 py-1.5 rounded-lg border border-red-500/20">
                     {errorMessage}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-1">
-                    {errorMessage.toLowerCase().includes("subtitles")
-                      ? "Reason: The video creator has not published captions or automated transcription is disabled for this upload."
-                      : errorMessage.toLowerCase().includes("failed to fetch")
-                      ? "Reason: Unable to reach the backend service. Ensure the FastAPI container is active and CORS headers are open."
-                      : "Reason: The extraction service encountered an unexpected error while resolving this video stream."}
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    {(() => {
+                      const msg = errorMessage.toLowerCase();
+                      if (msg.includes("rate-limited") || msg.includes("429") || msg.includes("bot")) return "Reason: YouTube has temporarily throttled subtitle requests from the server's cloud IP. Try again in 60 seconds or test with a video that has verified manual captions.";
+                      if (msg.includes("age") || msg.includes("private") || msg.includes("sign in")) return "Reason: This video requires YouTube authentication or is restricted to viewers over 18.";
+                      if (msg.includes("subtitles") || msg.includes("transcript") || msg.includes("captions")) return "Reason: The uploader has disabled closed captions, or automated transcription is not enabled for this specific upload.";
+                      if (msg.includes("failed to fetch") || msg.includes("network")) return "Reason: Unable to reach the backend service. If using Render free tier, allow ~30s for container cold start.";
+                      if (msg.includes("live")) return "Reason: Active YouTube live streams cannot be ingested until the broadcast ends and YouTube compiles the full subtitle file.";
+                      if (msg.includes("openai") || msg.includes("quota")) return "Reason: OpenAI API rate limit reached or account quota exceeded.";
+                      return "Reason: The extraction service encountered an unexpected error while resolving this video stream.";
+                    })()}
                   </p>
                 </div>
               </div>
             )}
+
 
 
             {/* Pipeline progress items */}

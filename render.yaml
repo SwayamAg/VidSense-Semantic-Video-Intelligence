@@ -17,3 +17,6 @@ services:
         value: gpt-4o-mini
       - key: OPENAI_EMBEDDING_MODEL
         value: text-embedding-3-small
+      - key: YOUTUBE_API_KEY
+        sync: false
+

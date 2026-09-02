@@ -107,9 +107,64 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         print(f"[WARNING] yt-dlp extraction failed: {e}")
         return None
 
+def fetch_transcript_with_youtube_api(video_id: str) -> Optional[str]:
+    """
+    Fetches captions using official Google Cloud YouTube Data API v3.
+    Requires YOUTUBE_API_KEY. Completely immune to datacenter IP blocks.
+    """
+    api_key = os.getenv("YOUTUBE_API_KEY")
+    if not api_key:
+        return None
+
+    import requests
+    import xml.etree.ElementTree as ET
+    import html
+
+    try:
+        print(f"[FETCH] Attempting official YouTube Data API v3 for: {video_id}")
+        list_url = f"https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId={video_id}&key={api_key}"
+        res = requests.get(list_url, timeout=10)
+        if res.status_code != 200:
+            print(f"[API_V3] Captions list returned status {res.status_code}: {res.text[:120]}")
+            return None
+
+        items = res.json().get("items", [])
+        if not items:
+            return None
+
+        # Prioritize English or first available track
+        chosen_id = None
+        for it in items:
+            snip = it.get("snippet", {})
+            lang = snip.get("language", "")
+            if lang.lower().startswith("en"):
+                chosen_id = it.get("id")
+                break
+        if not chosen_id:
+            chosen_id = items[0].get("id")
+
+        download_url = f"https://www.googleapis.com/youtube/v3/captions/{chosen_id}?key={api_key}&tfmt=ttml"
+        dl_res = requests.get(download_url, timeout=10)
+        if dl_res.status_code == 200 and dl_res.text.strip():
+            root = ET.fromstring(dl_res.text)
+            events = []
+            for p in root.iter("{http://www.w3.org/ns/ttml}p"):
+                begin = p.attrib.get("begin", "")
+                txt = "".join(p.itertext()).strip()
+                if txt:
+                    time_str = begin.split(".")[0] if begin else ""
+                    events.append(f"[{time_str}] {html.unescape(txt)}" if time_str else html.unescape(txt))
+            if events:
+                return " ".join(events)
+
+        return None
+    except Exception as e:
+        print(f"[WARNING] YouTube Data API v3 extraction error: {e}")
+        return None
+
 def fetch_transcript_from_youtube(video_id: str) -> str:
     """
-    Fetches transcript from YouTube using yt-dlp first, then youtube-transcript-api.
+    Fetches transcript from YouTube using yt-dlp first, official YouTube Data API v3 second, then scraper.
     Raises ValueError with descriptive reasoning if no transcript is available.
     """
     # 1. Try yt-dlp (Pro)
@@ -118,10 +173,17 @@ def fetch_transcript_from_youtube(video_id: str) -> str:
         print("[SUCCESS] Transcript fetched via yt-dlp.")
         return transcript
 
-    # 2. Fallback to youtube-transcript-api (Fast)
+    # 2. Try official YouTube Data API v3 (Immune to cloud IP blocks)
+    transcript_api = fetch_transcript_with_youtube_api(video_id)
+    if transcript_api:
+        print("[SUCCESS] Transcript fetched via official YouTube Data API v3.")
+        return transcript_api
+
+    # 3. Fallback to youtube-transcript-api (Fast)
     from youtube_transcript_api import YouTubeTranscriptApi
     try:
         print(f"[FETCH] Falling back to standard scraper for: {video_id}")
+
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
         
         # Try all major English dialects and Hindi

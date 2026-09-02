@@ -220,12 +220,13 @@ export default function Home() {
             className="glass-panel p-2 rounded-2xl flex flex-col sm:flex-row items-center gap-2 shadow-2xl shadow-purple-950/30 glow-purple"
           >
             <div className="flex items-center gap-3 px-3 w-full">
-              <Search className="h-5 w-5 text-slate-400 shrink-0" />
+              <Search className="h-5 w-5 text-slate-400 shrink-0" aria-hidden="true" />
               <input
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="Paste YouTube Video URL or ID (e.g. https://www.youtube.com/watch?v=...)"
+                aria-label="YouTube Video URL or ID"
                 className="w-full bg-transparent border-none text-sm sm:text-base text-white placeholder:text-slate-500 focus:outline-none"
                 disabled={analyzing}
               />
@@ -233,20 +234,22 @@ export default function Home() {
             <button
               type="submit"
               disabled={analyzing || !url.trim()}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shrink-0"
+              aria-label="Analyze YouTube Video"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shrink-0 cursor-pointer"
             >
               {analyzing ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                   <span>Analyzing...</span>
                 </>
               ) : (
                 <>
                   <span>Analyze</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </>
               )}
             </button>
+
           </form>
 
           {/* Sample quick buttons */}

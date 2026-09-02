@@ -296,17 +296,20 @@ export default function ChatPane({ videoId, onTimestampClick }: ChatPaneProps) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask anything about this video (e.g., 'What are the technical highlights?')"
+            aria-label="Ask a question about this video"
             className="flex-1 bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none"
             disabled={loading}
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs flex items-center gap-1.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-md shrink-0"
+            aria-label="Send question"
+            className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs flex items-center gap-1.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-md shrink-0 cursor-pointer"
           >
             <span>Send</span>
-            <Send className="h-3 w-3" />
+            <Send className="h-3 w-3" aria-hidden="true" />
           </button>
+
         </form>
       </div>
     </div>

@@ -1,6 +1,7 @@
-# 📺 YT-RAG Bot: Semantic Video Intelligence & AI Research Workspace
+# 📺 VidSense: Semantic Video Intelligence & RAG Assistant
 
 > **Full-stack, containerized AI video intelligence engine turning any YouTube video into an interactive, timestamp-grounded knowledge base with Next.js App Router, FastAPI, and FAISS.**
+
 
 ![Python](https://img.shields.io/badge/python-3.10-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=for-the-badge&logo=next.js&logoColor=white)

@@ -1,0 +1,55 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yt-rag-backend
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - PORT=8000
+    volumes:
+      - faiss_data:/app/faiss_index
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=
+    container_name: yt-rag-frontend
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: yt-rag-proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app_network
+
+volumes:
+  faiss_data:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge

@@ -191,12 +191,25 @@ Open **`http://localhost:3000`** in your browser!
 
 ---
 
-### 4. Or Run via Docker
+### 4. Or Run via Docker Compose (Local Development)
 ```bash
 docker compose up --build
 ```
 
 ---
+
+## 🚀 Production Deployment Options
+
+Detailed step-by-step instructions for all three platforms are in [**`DEPLOYMENT.md`**](./DEPLOYMENT.md):
+
+| Platform | Setup | Configuration File |
+| :--- | :--- | :--- |
+| **Vercel + Render / Railway** | Split Frontend (Vercel) + Backend (Render/Railway) | [`render.yaml`](./render.yaml) & [`frontend/vercel.json`](./frontend/vercel.json) |
+| **Cloud VPS (All-in-One)** | Single Server Docker Compose with Nginx Reverse Proxy | [`docker-compose.prod.yml`](./docker-compose.prod.yml) & [`nginx/nginx.conf`](./nginx/nginx.conf) |
+| **Hugging Face Spaces** | Free Docker Space hosting the FastAPI API & Swagger | [`Dockerfile`](./Dockerfile) (Auto-ports `7860` / `8000`) |
+
+---
+
 
 ## 🌐 REST API Reference
 

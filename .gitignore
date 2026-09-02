@@ -19,3 +19,9 @@ faiss_index/
 # IDEs
 .vscode/
 .idea/
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+

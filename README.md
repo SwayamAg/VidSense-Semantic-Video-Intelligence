@@ -14,7 +14,17 @@
 
 ---
 
+## 🌐 Live Demo
+
+🚀 **Experience the Full Workspace**: [**yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app**](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
+
+*(Backend API endpoints and Swagger URLs are documented in [`DEPLOYMENT.md`](./DEPLOYMENT.md))*
+
+---
+
+
 ## 📸 Interactive Workspace Preview
+
 
 ```text
 ========================================================================================

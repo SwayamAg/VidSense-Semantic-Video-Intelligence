@@ -19,7 +19,7 @@ This gives you **automatic CI/CD**, zero server maintenance, global Edge caching
 4. In the **Environment Variables** prompt, add:
    - `OPENAI_API_KEY`: Your OpenAI API key (`sk-...`).
 5. Click **Apply**.
-6. Once deployed, note your service URL (e.g., `https://yt-rag-backend.onrender.com`).
+6. **Live Backend Swagger URL**: [https://yt-rag-bot-semantic-video-intelligence.onrender.com/docs](https://yt-rag-bot-semantic-video-intelligence.onrender.com/docs)
 
 *(Alternative: You can also deploy via [Railway](https://railway.app/) using the included [`railway.toml`](./railway.toml)).*
 
@@ -28,10 +28,11 @@ This gives you **automatic CI/CD**, zero server maintenance, global Edge caching
 2. Under **Root Directory**, click edit and select **`frontend`**.
 3. Under **Environment Variables**, add:
    ```env
-   NEXT_PUBLIC_API_URL = https://yt-rag-backend.onrender.com
+   NEXT_PUBLIC_API_URL = https://yt-rag-bot-semantic-video-intelligence.onrender.com
    ```
 4. Click **Deploy**.
-5. Your full-stack app will be live at `https://your-project.vercel.app`!
+5. **Live Frontend Demo**: [https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
+
 
 ---
 

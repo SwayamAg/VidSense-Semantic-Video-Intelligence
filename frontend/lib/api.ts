@@ -100,6 +100,76 @@ export async function chatWithVideo(urlOrId: string, question: string): Promise<
   return res.json();
 }
 
+/**
+ * Streams tokens using Server-Sent Events (SSE) from the FastAPI backend.
+ */
+export async function streamChatWithVideo(
+  urlOrId: string,
+  question: string,
+  onToken: (token: string) => void,
+  onDone?: () => void,
+  onError?: (err: Error) => void
+): Promise<void> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/chat/stream`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url_or_id: urlOrId, question }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({ detail: "Streaming chat failed" }));
+      throw new Error(errorData.detail || "Streaming chat failed");
+    }
+
+    if (!res.body) {
+      throw new Error("No response body available for streaming");
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n\n");
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("data:")) {
+          const dataStr = trimmed.replace("data:", "").trim();
+          if (dataStr === "[DONE]") {
+            if (onDone) onDone();
+            return;
+          }
+          try {
+            const parsed = JSON.parse(dataStr);
+            if (parsed.token) {
+              onToken(parsed.token);
+            }
+            if (parsed.error) {
+              throw new Error(parsed.error);
+            }
+          } catch {
+            // Ignore non-json or malformed chunks
+          }
+        }
+      }
+    }
+
+    if (onDone) onDone();
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    if (onError) onError(error);
+    else throw error;
+  }
+}
+
+
 export async function searchVideo(urlOrId: string, query: string, k: number = 4): Promise<SearchResponse> {
   const res = await fetch(`${API_BASE_URL}/api/v1/search`, {
     method: "POST",

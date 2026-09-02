@@ -71,6 +71,25 @@ class RAGService:
         }
 
     @classmethod
+    def stream_chat_with_video(cls, url_or_id: str, question: str):
+        """Streams tokens from the RAG chain as Server-Sent Events (SSE)."""
+        import json
+        video_id = cls.resolve_video_id(url_or_id)
+        chain, is_fallback = get_rag_chain(video_id)
+        if not chain:
+            yield f"data: {json.dumps({'error': 'Failed to initialize RAG chain'})}\n\n"
+            return
+
+        try:
+            for chunk in chain.stream(question):
+                if chunk:
+                    yield f"data: {json.dumps({'token': chunk})}\n\n"
+            yield "data: [DONE]\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+
+    @classmethod
     def semantic_search(cls, url_or_id: str, query: str, k: int = 4) -> Dict[str, Any]:
         """Performs raw similarity search on the video vector store without calling LLM."""
         video_id = cls.resolve_video_id(url_or_id)

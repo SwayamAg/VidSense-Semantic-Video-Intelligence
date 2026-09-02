@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Send, Bot, User, Sparkles, Loader2, RotateCcw, Play } from "lucide-react";
-import { chatWithVideo } from "@/lib/api";
+import { Send, Bot, User, Sparkles, Loader2, RotateCcw, Play, Copy, Check } from "lucide-react";
+import { streamChatWithVideo } from "@/lib/api";
 import { parseTimestampToSeconds } from "@/lib/utils";
 
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
+  isStreaming?: boolean;
   isFallback?: boolean;
 }
 
@@ -27,6 +28,13 @@ export default function ChatPane({ videoId, onTimestampClick }: ChatPaneProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (id: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   const handleSend = async (questionToSend?: string) => {
     const q = questionToSend || input;
@@ -38,33 +46,59 @@ export default function ChatPane({ videoId, onTimestampClick }: ChatPaneProps) {
       content: q.trim(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const assistantId = (Date.now() + 1).toString();
+    const assistantPlaceholder: ChatMessage = {
+      id: assistantId,
+      role: "assistant",
+      content: "",
+      isStreaming: true,
+    };
+
+    setMessages((prev) => [...prev, userMessage, assistantPlaceholder]);
     setInput("");
     setLoading(true);
 
     try {
-      const response = await chatWithVideo(videoId, q.trim());
-      const assistantMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: response.answer,
-        isFallback: response.is_fallback,
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : "Error receiving AI answer.";
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: `[ERROR] Failed to query video: ${errorMsg}`,
+      await streamChatWithVideo(
+        videoId,
+        q.trim(),
+        (token: string) => {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantId
+                ? { ...msg, content: msg.content + token }
+                : msg
+            )
+          );
         },
-      ]);
-    } finally {
+        () => {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantId ? { ...msg, isStreaming: false } : msg
+            )
+          );
+          setLoading(false);
+        },
+        (error: Error) => {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantId
+                ? {
+                    ...msg,
+                    content: msg.content || `[ERROR] Streaming failed: ${error.message}`,
+                    isStreaming: false,
+                  }
+                : msg
+            )
+          );
+          setLoading(false);
+        }
+      );
+    } catch {
       setLoading(false);
     }
   };
+
 
   /**
    * Parses text and converts [MM:SS] or [HH:MM:SS] into interactive timestamp buttons
@@ -190,11 +224,46 @@ export default function ChatPane({ videoId, onTimestampClick }: ChatPaneProps) {
               {m.role === "user" ? (
                 <p className="text-sm">{m.content}</p>
               ) : (
-                <div>
-                  {renderFormattedContent(m.content)}
+                <div className="relative group/msg">
+                  {m.content ? (
+                    renderFormattedContent(m.content)
+                  ) : (
+                    <div className="flex items-center gap-2 text-xs text-purple-300 py-1">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>Synthesizing response...</span>
+                    </div>
+                  )}
+
+                  {m.isStreaming && (
+                    <span className="inline-block w-1.5 h-4 ml-1 bg-purple-400 animate-pulse align-middle" />
+                  )}
+
                   {m.isFallback && (
                     <div className="mt-3 pt-2 border-t border-white/[0.08] text-[11px] text-amber-400 font-mono">
                       [Notice: Default local knowledge base used as live transcript was unavailable]
+                    </div>
+                  )}
+
+                  {/* Copy button */}
+                  {!m.isStreaming && m.content && (
+                    <div className="mt-2.5 pt-2 border-t border-white/[0.06] flex items-center justify-end">
+                      <button
+                        onClick={() => handleCopy(m.id, m.content)}
+                        className="text-[11px] text-slate-400 hover:text-white flex items-center gap-1 px-2 py-0.5 rounded hover:bg-white/[0.04] transition-colors"
+                        title="Copy answer"
+                      >
+                        {copiedId === m.id ? (
+                          <>
+                            <Check className="h-3 w-3 text-emerald-400" />
+                            <span className="text-emerald-400">Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-3 w-3" />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                   )}
                 </div>
@@ -209,17 +278,6 @@ export default function ChatPane({ videoId, onTimestampClick }: ChatPaneProps) {
           </div>
         ))}
 
-        {loading && (
-          <div className="flex gap-3 max-w-3xl mr-auto">
-            <div className="h-7 w-7 rounded-lg bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-300 shrink-0">
-              <Bot className="h-4 w-4" />
-            </div>
-            <div className="glass-card px-4 py-3 rounded-2xl rounded-tl-none flex items-center gap-2 text-xs text-purple-300">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              <span>Retrieving relevant video chunks & reasoning...</span>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Input Bar */}

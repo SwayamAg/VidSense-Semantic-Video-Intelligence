@@ -63,10 +63,10 @@ export default function Home() {
 
   const [steps, setSteps] = useState<PipelineStep[]>([
     { id: "validate", label: "Validating Video & Resolving Metadata", status: "idle" },
-    { id: "transcript", label: "Extracting Timestamped Subtitles (yt-dlp)", status: "idle" },
-    { id: "chunking", label: "Recursive Character Splitting (chunk=1000, overlap=200)", status: "idle" },
-    { id: "embed", label: "Generating Vectors (text-embedding-3-small)", status: "idle" },
-    { id: "ready", label: "FAISS Vector Store Ready for Chat", status: "idle" },
+    { id: "transcript", label: "Extracting Timestamped Subtitles", status: "idle" },
+    { id: "chunking", label: "Splitting Transcript into Semantic Chunks", status: "idle" },
+    { id: "embed", label: "Generating Vector Embeddings", status: "idle" },
+    { id: "ready", label: "Vector Index Ready for Chat", status: "idle" },
   ]);
 
   // Check backend health on mount
@@ -95,11 +95,12 @@ export default function Home() {
     // Reset steps
     setSteps([
       { id: "validate", label: "Validating Video & Resolving Metadata", status: "running" },
-      { id: "transcript", label: "Extracting Timestamped Subtitles (yt-dlp)", status: "idle" },
-      { id: "chunking", label: "Recursive Character Splitting (chunk=1000, overlap=200)", status: "idle" },
-      { id: "embed", label: "Generating Vectors (text-embedding-3-small)", status: "idle" },
-      { id: "ready", label: "FAISS Vector Store Ready for Chat", status: "idle" },
+      { id: "transcript", label: "Extracting Timestamped Subtitles", status: "idle" },
+      { id: "chunking", label: "Splitting Transcript into Semantic Chunks", status: "idle" },
+      { id: "embed", label: "Generating Vector Embeddings", status: "idle" },
+      { id: "ready", label: "Vector Index Ready for Chat", status: "idle" },
     ]);
+
 
     try {
       // Step 1: Video Info

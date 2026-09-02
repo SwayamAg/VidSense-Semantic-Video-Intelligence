@@ -179,29 +179,30 @@ export default function ChatPane({ videoId, onTimestampClick }: ChatPaneProps) {
             <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-purple-600/20 to-indigo-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300 mb-4 shadow-xl">
               <Bot className="h-6 w-6" />
             </div>
-            <h3 className="text-base font-semibold text-white mb-2">Ready to query this video</h3>
+            <h3 className="text-base font-semibold text-white mb-2">Ask anything about this video</h3>
             <p className="text-xs text-slate-400 leading-relaxed mb-6">
-              Ask questions to extract key insights, processes, and timestamp-backed facts directly from the transcript.
+              Ask questions about the video&apos;s content and get answers grounded strictly in its transcript with clickable timestamp citations.
             </p>
 
             {/* Starter Prompts */}
             <div className="w-full space-y-2">
               <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block text-left mb-1">
-                Suggested Starter Prompts:
+                Suggested questions:
               </span>
               {STARTER_PROMPTS.map((prompt) => (
                 <button
                   key={prompt}
                   onClick={() => handleSend(prompt)}
-                  className="w-full text-left p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-purple-500/30 text-xs text-slate-300 transition-all flex items-center justify-between group"
+                  className="w-full text-left p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-purple-500/30 text-xs text-slate-300 transition-all flex items-center justify-between group cursor-pointer"
                 >
                   <span className="line-clamp-1">{prompt}</span>
-                  <Sparkles className="h-3.5 w-3.5 text-slate-500 group-hover:text-purple-400 shrink-0 ml-2" />
+                  <Sparkles className="h-3.5 w-3.5 text-slate-500 group-hover:text-purple-400 shrink-0 ml-2 transition-colors" />
                 </button>
               ))}
             </div>
           </div>
         )}
+
 
         {messages.map((m) => (
           <div

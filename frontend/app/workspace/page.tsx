@@ -70,8 +70,9 @@ function WorkspaceContent() {
               <Video className="h-3.5 w-3.5 text-white" />
             </div>
             <span className="font-semibold text-sm text-white tracking-tight hidden sm:inline">
-              YT-RAG<span className="text-purple-400">Bot</span>
+              Vid<span className="text-purple-400">Sense</span>
             </span>
+
           </div>
 
           <span className="text-xs text-slate-400 max-w-sm truncate hidden md:inline" title={videoTitle}>

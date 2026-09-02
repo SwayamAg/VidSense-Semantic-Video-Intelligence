@@ -137,7 +137,7 @@ export default function Home() {
         <div className="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[140px]" />
       </div>
 
-      {/* Top Navigation */}
+      {/* Top Navigation Bar */}
       <header className="relative z-10 border-b border-white/[0.06] bg-slate-950/40 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -145,43 +145,53 @@ export default function Home() {
               <Video className="h-5 w-5 text-white" />
             </div>
 
-            <div className="flex flex-col">
-              <span className="font-semibold tracking-tight text-white flex items-center gap-2">
-                YT-RAG<span className="text-purple-400">Bot</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 font-mono">
-                  v2.0
-                </span>
+            <div className="flex flex-col text-left">
+              <span className="font-semibold tracking-tight text-white flex items-center gap-2 text-base">
+                Vid<span className="text-purple-400">Sense</span>
+              </span>
+              <span className="text-[10px] text-slate-400 -mt-0.5 tracking-wide font-medium hidden sm:inline">
+                Semantic Video Intelligence
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Backend Health Status Badge */}
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.02] text-xs">
-              <span className={`h-2 w-2 rounded-full ${health?.status === "healthy" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`} />
-              <span className="text-slate-300">
-                {backendLoading ? "Connecting..." : health?.status === "healthy" ? "FastAPI Online" : "FastAPI Disconnected"}
-              </span>
-            </div>
+            <a
+              href="#how-it-works"
+              className="text-xs text-slate-400 hover:text-white transition-colors hidden sm:inline font-medium"
+            >
+              How It Works
+            </a>
+
+            <div className="h-4 w-px bg-white/10 hidden sm:block" />
 
             <a
-              href="http://localhost:8000/docs"
+              href="https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence"
               target="_blank"
               rel="noreferrer"
-              className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
+              className="text-xs text-slate-300 hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] transition-all font-medium"
             >
-              Swagger Docs <ExternalLink className="h-3 w-3" />
+              <span>GitHub</span>
+              <ExternalLink className="h-3 w-3" />
             </a>
+
+            {/* Backend Health Status Badge */}
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.02] text-xs">
+              <span className={`h-2 w-2 rounded-full ${health?.status === "healthy" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`} />
+              <span className="text-slate-400 text-[11px] font-mono hidden md:inline">
+                {backendLoading ? "Connecting..." : health?.status === "healthy" ? "API Online" : "API Offline"}
+              </span>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Hero Container */}
-      <main className="relative z-10 flex-1 max-w-5xl mx-auto px-6 pt-16 pb-24 flex flex-col items-center justify-center text-center">
+      <main className="relative z-10 flex-1 max-w-5xl mx-auto px-6 pt-14 pb-24 flex flex-col items-center justify-center text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-purple-500/20 bg-purple-500/5 text-purple-300 text-xs font-medium mb-6 shadow-sm">
           <Sparkles className="h-3.5 w-3.5 text-purple-400" />
-          <span>Semantic Video Intelligence & Research Workspace</span>
+          <span>Semantic Video Intelligence & RAG Assistant</span>
         </div>
 
         {/* Hero Title */}
@@ -193,8 +203,9 @@ export default function Home() {
         </h1>
 
         <p className="mt-5 text-base sm:text-lg text-slate-400 max-w-2xl leading-relaxed">
-          Ground AI responses strictly in factual video context. Supports all global English dialects (en, en-orig, en-US, en-GB, en-IN, en-CA, en-AU) and Hindi subtitles with verifiable timestamp citations.
+          Ground AI responses strictly in factual video context with semantic retrieval, verified answers, and interactive timestamp citations.
         </p>
+
 
 
         {/* Input Bar */}

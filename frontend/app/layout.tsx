@@ -9,10 +9,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "YT-RAGBot — Semantic Video Intelligence & AI Research Workspace",
+  title: "VidSense — Semantic Video Intelligence & RAG Assistant",
   description:
-    "Transform any YouTube video into an interactive, timestamp-grounded knowledge base using LangChain, FAISS, and OpenAI.",
+    "Turn any YouTube video into an interactive knowledge base with semantic retrieval, grounded answers, and timestamp-based sources.",
 };
+
 
 export default function RootLayout({
   children,

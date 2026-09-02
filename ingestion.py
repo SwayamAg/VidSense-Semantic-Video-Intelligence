@@ -221,13 +221,14 @@ def fetch_transcript_from_youtube(video_id: str) -> str:
     except Exception as e:
         error_str = str(e)
         if "Subtitles are disabled" in error_str or "No transcripts were found" in error_str:
-            raise ValueError("This YouTube video does not have closed captions/subtitles enabled by the creator.")
+            raise ValueError(f"This YouTube video does not have closed captions/subtitles enabled by the creator. (Scraper: {error_str[:60]})")
         elif "Too Many Requests" in error_str or "429" in error_str:
             raise ValueError("YouTube API rate-limited caption requests. Please try again in a few moments.")
         else:
             raise ValueError(f"Unable to access video transcript: {error_str[:120]}")
 
     raise ValueError("No English or supported language subtitles could be found for this video.")
+
 
 def get_or_create_vector_store(video_id: str):
     """

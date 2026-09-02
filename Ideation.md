@@ -757,6 +757,39 @@ Video
 
 ---
 
+# V2.5 — Experimental Multimodal Video Analysis Layer (Adversal.AI) 🔬
+
+> **Architectural Guardrail**: Adversal.AI is strictly an **optional enhancement layer**, NOT a replacement for the core FAISS transcript RAG pipeline.
+
+### Why / Problem:
+The current MVP pipeline operates on audio transcripts:
+```text
+YouTube → Transcript → Chunking → Embeddings → FAISS → RAG
+```
+While fast and accurate for spoken dialog, it cannot answer visual questions such as:
+* *"What architecture is shown on screen at 12:32?"*
+* *"Explain the diagram around 18:40."*
+* *"What error code appeared in the terminal demo?"*
+
+### Proposed V2.5 Flow:
+```text
+                       ┌──► [Core Fast Path] Transcript → FAISS RAG (Standard Q&A)
+YouTube Video / ID ────┤
+                       └──► [Optional V2.5 Layer] Adversal.AI API
+                                     ↓
+                             Extracted Frames / Visual Summaries / Scene Notes
+                                     ↓
+                             Enriched Knowledge Base (Multimodal Context)
+```
+
+### Evaluation & Safety Gates:
+1. **Zero Impact on MVP**: Default queries continue using the sub-second FAISS vector index.
+2. **Quality Benchmark**: Evaluate Adversal.AI's API latency, rate limits, OCR precision, and cost before promoting it to a core dependency.
+3. **Graceful Fallback**: If Adversal.AI fails or is unconfigured, the system operates purely on the transcript pipeline without user disruption.
+
+
+---
+
 # V2 — Persistence & User Experience
 
 After the core workflow works:

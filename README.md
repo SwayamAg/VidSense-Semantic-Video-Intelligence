@@ -252,17 +252,22 @@ TIMESTAMPS:
   - *Why*: Provide an auto-generated structural outline of long lectures, allowing users to skim topics before querying.
   - *Implementation*: LLM-driven transcript segmentation clustering timestamps into thematic topic milestones.
 
+### 🔬 V2.5 — Experimental Multimodal Video Analysis Layer (`Adversal.AI`)
+- **Visual Video Intelligence (Optional Add-on)**
+  - *Concept*: An optional enrichment layer running alongside the core FAISS transcript pipeline (not replacing it).
+  - *Why*: Enables answering questions beyond audio transcripts, such as *"What architecture diagram is shown on screen at 12:32?"* or *"What terminal error was shown at 18:40?"*.
+  - *Evaluation Guardrails*: Rigorously benchmark API latency, OCR/diagram comprehension quality, and costs before considering any core dependency status. Pure transcript RAG remains the instant default path.
+
 ### 🚀 V3 — Multi-Modal & Large-Scale Expansion
-- **🎬 Multi-Modal Video RAG (On-Screen Keyframe Retrieval)**
-  - *Why*: Complex technical videos contain terminal output, slide decks, and architecture diagrams never read aloud.
-  - *Implementation*: Keyframe extraction at scene transitions, indexed with **ColPali** or **CLIP / Vision Embeddings**, allowing queries against on-screen code.
+- **🎬 Native Multi-Modal Video RAG (Keyframe Vector Search with ColPali / CLIP)**
+  - *Why*: Direct local embedding of video keyframes for visual similarity without third-party API dependencies.
 - **🎙️ Speaker Diarization (`whisperx` / `pyannote.audio`)**
-  - *Why*: In podcasts and debates, attributing statements correctly (e.g., *"What did the guest say about transformers?"*) requires speaker identification tags (`[Host]` vs. `[Guest]`).
+  - *Why*: In podcasts and debates, attributing statements correctly requires speaker identification tags (`[Host]` vs. `[Guest]`).
 - **⚡ Google TurboQuant / TurboVec / Qdrant Enterprise Scaling**
-  - *Why*: Scaling from local single-video indices to indexing full YouTube channels (1,000+ videos).
-  - *Implementation*: TurboQuant provides **~8x memory compression** for high-dimensional vectors, while Qdrant provides managed multi-tenant cloud vector storage with payload filtering.
+  - *Why*: Scaling to thousands of video archives with ~8x memory compression and cloud persistence.
 - **📚 Multi-Video Workspace Research**
   - *Why*: Query across playlist archives or related technical lectures simultaneously with cross-video synthesis.
+
 
 
 ---

@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // Only enable standalone output when building with Docker/self-hosted
+  output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
 };
+
 
 
 export default nextConfig;

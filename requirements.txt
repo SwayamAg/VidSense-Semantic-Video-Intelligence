@@ -69,3 +69,4 @@ streamlit==1.37.1
 # ==== Compatibility =====
 packaging>=23.2,<25
 youtube-transcript-api==0.6.1
+yt-dlp

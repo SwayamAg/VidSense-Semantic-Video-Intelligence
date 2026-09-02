@@ -2,7 +2,10 @@
  * Typed client connecting Next.js to the FastAPI backend (http://localhost:8000)
  */
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+export const API_BASE_URL = (
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+).replace(/\/+$/, "");
+
 
 export interface HealthResponse {
   status: string;

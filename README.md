@@ -16,9 +16,10 @@
 
 ## 🌐 Live Demo
 
-🚀 **Interactive AI Research Workspace**: [**https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/**](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-Visit_Website-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
 
 ---
+
 
 
 

@@ -517,38 +517,67 @@ export default function Home() {
       </main>
 
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/[0.06] bg-slate-950/40 backdrop-blur-md py-6 mt-auto">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div className="flex items-center gap-2">
-            <span>Developed by</span>
-            <span className="font-medium text-slate-200">Swayam Agarwal</span>
+      {/* Professional Product & Portfolio Footer */}
+      <footer className="relative z-10 border-t border-white/[0.06] bg-slate-950/60 backdrop-blur-md py-8 mt-auto">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-400">
+          <div className="flex flex-col items-center md:items-start gap-1">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-white tracking-tight text-sm">Vid<span className="text-purple-400">Sense</span></span>
+              <span className="text-slate-600">|</span>
+              <span className="text-slate-400">Semantic Video Intelligence & RAG Assistant</span>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              Turn any YouTube video into an interactive knowledge base with grounded answers.
+            </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/SwayamAg"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
-            >
-              <span>GitHub</span>
-              <ExternalLink className="h-3 w-3" />
-            </a>
-            <span className="text-slate-700">•</span>
-            <a
-              href="https://www.linkedin.com/in/swayam-agarwal/"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-1.5 text-slate-400 hover:text-sky-400 transition-colors"
-            >
-              <span>LinkedIn</span>
-              <ExternalLink className="h-3 w-3" />
-            </a>
+          <div className="flex flex-col items-center md:items-end gap-1.5">
+            <div className="flex items-center gap-2 text-slate-300">
+              <span>Built by <strong className="text-white font-medium">Swayam Agarwal</strong></span>
+            </div>
+            <span className="text-[11px] text-purple-400/90 font-mono">
+              AI/ML Engineer | RAG • LLMs • Computer Vision
+            </span>
+            <div className="flex items-center gap-3 mt-1 text-slate-400">
+              <a
+                href="https://github.com/SwayamAg"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white transition-colors flex items-center gap-1"
+              >
+                <span>GitHub</span>
+                <ExternalLink className="h-3 w-3" />
+              </a>
+              <span className="text-slate-700">•</span>
+              <a
+                href="https://www.linkedin.com/in/swayam-agarwal/"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-sky-400 transition-colors flex items-center gap-1"
+              >
+                <span>LinkedIn</span>
+                <ExternalLink className="h-3 w-3" />
+              </a>
+              <span className="text-slate-700">•</span>
+              <a
+                href="https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-purple-300 transition-colors flex items-center gap-1"
+              >
+                <span>Source Code</span>
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
           </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-6 mt-6 pt-4 border-t border-white/[0.04] text-center text-[11px] text-slate-600">
+          © 2026 Swayam Agarwal. All rights reserved.
         </div>
       </footer>
     </div>
   );
 }
+
 

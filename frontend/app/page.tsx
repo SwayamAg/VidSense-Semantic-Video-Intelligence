@@ -15,8 +15,13 @@ import {
   ExternalLink,
   Cpu,
   Globe,
-  AlertCircle
+  AlertCircle,
+  BookOpen,
+  FileText,
+  Zap,
+  Database
 } from "lucide-react";
+
 
 
 
@@ -377,49 +382,140 @@ export default function Home() {
           </div>
         )}
 
-        {/* Feature Pill Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mt-20 text-left">
-          <div className="glass-card p-5 rounded-2xl">
-            <div className="h-8 w-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3">
-              <Clock className="h-4 w-4" />
-            </div>
-            <h3 className="text-sm font-semibold text-white">Timestamp Grounding</h3>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Captures video milliseconds and transforms them into verifiable [MM:SS] interactive citations.
-            </p>
+        {/* Key Capabilities Feature Grid */}
+        <div className="w-full max-w-5xl mt-20 text-left">
+          <div className="mb-6 text-center sm:text-left">
+            <h2 className="text-xs font-semibold text-purple-400 uppercase tracking-wider">Key Capabilities</h2>
+            <p className="text-lg font-bold text-white mt-1">Built for Accuracy & Speed</p>
           </div>
 
-          <div className="glass-card p-5 rounded-2xl">
-            <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
-              <Layers className="h-4 w-4" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="glass-card p-5 rounded-2xl hover:border-purple-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3">
+                <Clock className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Timestamp Grounding</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Answers reference exact moments with verifiable, clickable [MM:SS] video citations.
+              </p>
             </div>
-            <h3 className="text-sm font-semibold text-white">Triple Redundancy</h3>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Automated failover between yt-dlp pro-fetch, standard scrapers, and local fallbacks.
-            </p>
-          </div>
 
-          <div className="glass-card p-5 rounded-2xl">
-            <div className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
-              <Globe className="h-4 w-4" />
+            <div className="glass-card p-5 rounded-2xl hover:border-indigo-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
+                <Layers className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Reliable Transcript Extraction</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Automated multi-engine extraction ensures reliable ingestion even on complex cloud servers.
+              </p>
             </div>
-            <h3 className="text-sm font-semibold text-white">Global Dialect Coverage</h3>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Broad language support across en, en-orig, en-US, en-GB, en-IN, en-CA, en-AU, and Hindi.
-            </p>
-          </div>
 
-          <div className="glass-card p-5 rounded-2xl">
-            <div className="h-8 w-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3">
-              <ShieldCheck className="h-4 w-4" />
+            <div className="glass-card p-5 rounded-2xl hover:border-emerald-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
+                <Globe className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Global Dialect Coverage</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Universal support for all English dialects (en, en-orig, US, GB, IN, CA, AU) and Hindi.
+              </p>
             </div>
-            <h3 className="text-sm font-semibold text-white">Isolated Vector Spaces</h3>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Persistent FAISS indices isolated by Video ID to prevent cross-video hallucination.
-            </p>
+
+            <div className="glass-card p-5 rounded-2xl hover:border-sky-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Isolated Vector Spaces</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Every video gets its own dedicated FAISS index on disk, eliminating cross-video hallucination.
+              </p>
+            </div>
           </div>
         </div>
+
+        {/* How It Works Architecture Section */}
+        <section id="how-it-works" className="w-full max-w-5xl mt-24 text-left scroll-mt-20">
+          <div className="text-center sm:text-left mb-8">
+            <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">Architecture</span>
+            <h2 className="text-2xl font-bold text-white mt-1">How VidSense Works</h2>
+            <p className="text-xs text-slate-400 mt-1 max-w-xl">
+              A genuine Retrieval-Augmented Generation pipeline connecting raw YouTube audio transcripts to factual LLM answers.
+            </p>
+          </div>
+
+          <div className="glass-card p-6 rounded-2xl border-white/[0.08]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-center">
+              {[
+                { step: "1", title: "YouTube URL", desc: "Metadata & ID resolution" },
+                { step: "2", title: "Transcript", desc: "yt-dlp & timestamp parsing" },
+                { step: "3", title: "Chunking", desc: "1000 char recursive split" },
+                { step: "4", title: "Embeddings", desc: "OpenAI 1536-dim vectors" },
+                { step: "5", title: "FAISS Index", desc: "Sub-millisecond similarity" },
+                { step: "6", title: "Context", desc: "Top-k grounded chunks" },
+                { step: "7", title: "Grounded Answer", desc: "SSE streamed with [MM:SS]" },
+              ].map((item, idx) => (
+                <div key={item.step} className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] flex flex-col items-center">
+                  <span className="h-6 w-6 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold flex items-center justify-center mb-2">
+                    {item.step}
+                  </span>
+                  <span className="text-xs font-semibold text-white">{item.title}</span>
+                  <span className="text-[10px] text-slate-400 mt-1 leading-tight">{item.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Use Cases Section */}
+        <section className="w-full max-w-5xl mt-20 text-left">
+          <div className="text-center sm:text-left mb-8">
+            <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Applications</span>
+            <h2 className="text-2xl font-bold text-white mt-1">Built for Deep Comprehension</h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="glass-card p-5 rounded-2xl hover:border-purple-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3">
+                <BookOpen className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Learning</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Ask targeted questions about lectures, tutorials, and courses without scrubbing through hours of video.
+              </p>
+            </div>
+
+            <div className="glass-card p-5 rounded-2xl hover:border-indigo-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
+                <Search className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Research</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Locate specific technical claims, statistics, and citations across long-form video archives.
+              </p>
+            </div>
+
+            <div className="glass-card p-5 rounded-2xl hover:border-emerald-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
+                <FileText className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Content Analysis</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Extract core concepts, frameworks, and counter-arguments systematically from conference talks.
+              </p>
+            </div>
+
+            <div className="glass-card p-5 rounded-2xl hover:border-sky-500/30 transition-all">
+              <div className="h-8 w-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3">
+                <Zap className="h-4 w-4" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">Quick Understanding</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Get rapid, trustworthy answers when you need the core insight and don&apos;t have time to watch the full video.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
+
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] bg-slate-950/40 backdrop-blur-md py-6 mt-auto">

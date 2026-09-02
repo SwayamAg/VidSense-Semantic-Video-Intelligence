@@ -123,12 +123,13 @@ export default function ChatPane({ videoId, onTimestampClick }: ChatPaneProps) {
         <button
           key={match.index}
           onClick={() => onTimestampClick(seconds)}
-          className="inline-flex items-center gap-1 mx-1 px-2 py-0.5 rounded-md bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 text-xs font-mono transition-colors shadow-sm cursor-pointer"
-          title={`Click to jump to ${timestampStr} in video`}
+          className="inline-flex items-center gap-1.5 mx-1 px-2.5 py-0.5 rounded-md bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 hover:text-purple-100 border border-purple-500/30 hover:border-purple-400/50 text-[11px] font-mono transition-all shadow-sm cursor-pointer align-baseline group"
+          title={`Jump to ${timestampStr} in video player`}
         >
-          <Play className="h-2.5 w-2.5 fill-purple-300 text-purple-300" />
-          <span>{timestampStr}</span>
+          <Play className="h-2 w-2 fill-purple-400 text-purple-400 group-hover:fill-purple-200 group-hover:text-purple-200 transition-colors" />
+          <span className="font-semibold tracking-tight">{timestampStr}</span>
         </button>
+
       );
 
       lastIndex = match.index + match[0].length;

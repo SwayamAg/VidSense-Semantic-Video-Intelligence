@@ -3,10 +3,11 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Video, ExternalLink, Loader2 } from "lucide-react";
+import { ArrowLeft, Video, ExternalLink, Loader2, Database } from "lucide-react";
 import VideoPane from "@/components/video/VideoPane";
 import ChatPane from "@/components/chat/ChatPane";
 import KnowledgePane from "@/components/knowledge/KnowledgePane";
+import VideoLibraryDrawer from "@/components/navigation/VideoLibraryDrawer";
 import { getVideoInfo } from "@/lib/api";
 
 function WorkspaceContent() {
@@ -17,6 +18,8 @@ function WorkspaceContent() {
   const [videoTitle, setVideoTitle] = useState<string>("Loading video details...");
   const [seekTime, setSeekTime] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showLibrary, setShowLibrary] = useState(false);
+
 
   // Load video title metadata
   useEffect(() => {
@@ -77,6 +80,14 @@ function WorkspaceContent() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowLibrary(true)}
+            className="flex items-center gap-1.5 text-xs text-indigo-300 hover:text-white px-2.5 py-1.5 rounded-lg border border-indigo-500/20 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all font-medium"
+          >
+            <Database className="h-3.5 w-3.5" />
+            <span>Library</span>
+          </button>
+
           <a
             href="http://localhost:8000/docs"
             target="_blank"
@@ -87,6 +98,13 @@ function WorkspaceContent() {
           </a>
         </div>
       </header>
+
+      <VideoLibraryDrawer
+        isOpen={showLibrary}
+        currentVideoId={videoParam}
+        onClose={() => setShowLibrary(false)}
+      />
+
 
       {/* 3-Pane Grid Workspace */}
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">

@@ -101,3 +101,12 @@ def delete_index(video_id: str):
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No index found for Video ID '{video_id}'.")
     return {"status": "success", "message": f"Index for '{video_id}' deleted successfully."}
+
+@router.get("/api/v1/video/{video_id}/transcript", tags=["Video Metadata"])
+def get_video_transcript(video_id: str):
+    """Returns the full raw transcript segments with timestamps."""
+    try:
+        return RAGService.get_transcript(video_id)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+

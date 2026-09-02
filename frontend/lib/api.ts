@@ -188,3 +188,23 @@ export async function listIndexes(): Promise<IndexListResponse> {
   if (!res.ok) throw new Error("Failed to list cached indices");
   return res.json();
 }
+
+export interface TranscriptSegment {
+  timestamp: string;
+  time_str: string;
+  text: string;
+}
+
+export interface TranscriptResponse {
+  video_id: string;
+  title: string;
+  total_segments: number;
+  segments: TranscriptSegment[];
+}
+
+export async function getTranscript(videoId: string): Promise<TranscriptResponse> {
+  const res = await fetch(`${API_BASE_URL}/api/v1/video/${videoId}/transcript`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch video transcript");
+  return res.json();
+}
+

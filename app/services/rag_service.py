@@ -129,11 +129,40 @@ class RAGService:
             "indices": indices
         }
 
-    @staticmethod
-    def delete_index(video_id: str) -> bool:
-        """Deletes the persistent FAISS index directory for a video ID."""
-        target = os.path.join(FAISS_INDEX_PATH, video_id)
-        if os.path.exists(target) and os.path.isdir(target):
-            shutil.rmtree(target, ignore_errors=True)
-            return True
-        return False
+    @classmethod
+    def get_transcript(cls, url_or_id: str) -> Dict[str, Any]:
+        """Returns the full raw transcript segments with timestamps for a video."""
+        import re
+        from ingestion import fetch_transcript_from_youtube, fetch_transcript_from_local
+
+        video_id = cls.resolve_video_id(url_or_id)
+        title = get_video_title(video_id)
+
+        raw = fetch_transcript_from_youtube(video_id) or fetch_transcript_from_local() or ""
+        
+        # Parse segments like [00:15] text
+        segments = []
+        pattern = re.compile(r'\[(\d{1,2}:\d{2}(?::\d{2})?)\]\s*([^\[]+)')
+        matches = pattern.findall(raw)
+        
+        if matches:
+            for time_str, text in matches:
+                segments.append({
+                    "timestamp": f"[{time_str}]",
+                    "time_str": time_str,
+                    "text": text.strip()
+                })
+        elif raw:
+            segments.append({
+                "timestamp": "[00:00]",
+                "time_str": "00:00",
+                "text": raw.strip()
+            })
+
+        return {
+            "video_id": video_id,
+            "title": title,
+            "total_segments": len(segments),
+            "segments": segments
+        }
+

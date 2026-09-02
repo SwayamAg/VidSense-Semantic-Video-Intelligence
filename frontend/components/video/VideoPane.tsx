@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { ExternalLink, Play, Clock, Sparkles } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ExternalLink, Play, Clock, Sparkles, FileText } from "lucide-react";
+import TranscriptModal from "@/components/video/TranscriptModal";
+
 
 interface VideoPaneProps {
   videoId: string;
@@ -16,7 +18,9 @@ export default function VideoPane({
   seekTime,
   onSeekComplete,
 }: VideoPaneProps) {
+  const [showTranscript, setShowTranscript] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
 
   // Send postMessage to YouTube Iframe whenever seekTime changes
   useEffect(() => {
@@ -93,7 +97,15 @@ export default function VideoPane({
       </div>
 
       {/* Metadata & Quick Jump Cards */}
-      <div className="p-4 mt-auto border-t border-white/[0.08] text-xs text-slate-400 space-y-2">
+      <div className="p-4 mt-auto border-t border-white/[0.08] text-xs text-slate-400 space-y-3">
+        <button
+          onClick={() => setShowTranscript(true)}
+          className="w-full py-2.5 px-3 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-purple-500/40 text-slate-200 transition-all flex items-center justify-center gap-2 font-medium"
+        >
+          <FileText className="h-3.5 w-3.5 text-purple-400" />
+          <span>View Full Transcript</span>
+        </button>
+
         <div className="flex items-center justify-between text-slate-400">
           <span className="flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5 text-slate-500" />
@@ -109,6 +121,33 @@ export default function VideoPane({
           <span className="text-slate-300">Connected</span>
         </div>
       </div>
+
+      <TranscriptModal
+        videoId={videoId}
+        isOpen={showTranscript}
+        onClose={() => setShowTranscript(false)}
+        onSeek={(seconds) => {
+          if (iframeRef.current && iframeRef.current.contentWindow) {
+            iframeRef.current.contentWindow.postMessage(
+              JSON.stringify({
+                event: "command",
+                func: "seekTo",
+                args: [seconds, true],
+              }),
+              "*"
+            );
+            iframeRef.current.contentWindow.postMessage(
+              JSON.stringify({
+                event: "command",
+                func: "playVideo",
+                args: [],
+              }),
+              "*"
+            );
+          }
+        }}
+      />
     </div>
   );
 }
+

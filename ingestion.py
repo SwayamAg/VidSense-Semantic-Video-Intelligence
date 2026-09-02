@@ -64,8 +64,7 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
 
     if cookie_file:
         ydl_opts['cookiefile'] = cookie_file
-        # When cookies are present, also enable web and mweb clients
-        ydl_opts['extractor_args']['youtube']['player_client'] = ['android', 'mweb', 'web']
+
 
 
 

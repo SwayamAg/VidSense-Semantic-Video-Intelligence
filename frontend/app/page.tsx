@@ -561,19 +561,10 @@ export default function Home() {
                 <span>LinkedIn</span>
                 <ExternalLink className="h-3 w-3" />
               </a>
-              <span className="text-slate-700">•</span>
-              <a
-                href="https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-purple-300 transition-colors flex items-center gap-1"
-              >
-                <span>Source Code</span>
-                <ExternalLink className="h-3 w-3" />
-              </a>
             </div>
           </div>
         </div>
+
 
         <div className="max-w-6xl mx-auto px-6 mt-6 pt-4 border-t border-white/[0.04] text-center text-[11px] text-slate-600">
           © 2026 Swayam Agarwal. All rights reserved.

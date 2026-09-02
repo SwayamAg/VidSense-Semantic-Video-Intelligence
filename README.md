@@ -125,7 +125,9 @@ graph LR
 
 ```text
 YT-RAG_BOT/
+├── Docs/                             # Architectural, Challenge & Production Specs
 ├── app/                              # FastAPI Service Layer
+
 │   ├── api/
 │   │   └── routes.py                 # REST & SSE Endpoints (/stream, /chat, /search, /transcript)
 │   ├── models/

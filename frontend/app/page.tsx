@@ -248,24 +248,37 @@ export default function Home() {
         {/* Pipeline Execution Card */}
         {(analyzing || videoInfo || errorMessage) && (
           <div className="w-full max-w-2xl mt-8 glass-panel p-6 rounded-2xl border border-white/10 text-left animate-in fade-in duration-300">
-            <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/[0.08]">
-              <div>
-                <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-                  <Cpu className="h-4 w-4 text-purple-400" />
-                  <span>RAG Ingestion Pipeline</span>
-                </h2>
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/[0.08] gap-4">
+              <div className="flex items-center gap-3.5 min-w-0">
                 {videoInfo && (
-                  <p className="text-xs text-slate-400 mt-0.5 truncate max-w-md">
-                    {videoInfo.title}
-                  </p>
+                  <div className="relative w-24 aspect-video rounded-lg overflow-hidden border border-white/10 shrink-0 bg-slate-900 shadow-md">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`https://img.youtube.com/vi/${videoInfo.video_id}/mqdefault.jpg`}
+                      alt={videoInfo.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 )}
+                <div className="min-w-0">
+                  <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+                    <Cpu className="h-4 w-4 text-purple-400 shrink-0" />
+                    <span>RAG Ingestion Pipeline</span>
+                  </h2>
+                  {videoInfo && (
+                    <p className="text-xs text-slate-300 mt-1 truncate max-w-sm font-medium" title={videoInfo.title}>
+                      {videoInfo.title}
+                    </p>
+                  )}
+                </div>
               </div>
               {videoInfo?.is_cached && (
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 shrink-0 font-medium">
                   Cached in FAISS
                 </span>
               )}
             </div>
+
 
             {/* Error banner */}
             {errorMessage && (

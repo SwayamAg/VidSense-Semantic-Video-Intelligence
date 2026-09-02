@@ -408,8 +408,40 @@ export default function Home() {
             </p>
           </div>
         </div>
-
       </main>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-white/[0.06] bg-slate-950/40 backdrop-blur-md py-6 mt-auto">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+          <div className="flex items-center gap-2">
+            <span>Developed by</span>
+            <span className="font-medium text-slate-200">Swayam Agarwal</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <a
+              href="https://github.com/SwayamAg"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
+            >
+              <span>GitHub</span>
+              <ExternalLink className="h-3 w-3" />
+            </a>
+            <span className="text-slate-700">•</span>
+            <a
+              href="https://www.linkedin.com/in/swayam-agarwal/"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 text-slate-400 hover:text-sky-400 transition-colors"
+            >
+              <span>LinkedIn</span>
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
+

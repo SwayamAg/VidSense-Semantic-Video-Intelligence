@@ -88,16 +88,29 @@ function WorkspaceContent() {
             <span>Library</span>
           </button>
 
+          <div className="h-4 w-px bg-white/10 hidden sm:block" />
+
+
           <a
-            href="http://localhost:8000/docs"
+            href="https://github.com/SwayamAg"
             target="_blank"
             rel="noreferrer"
-            className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
+            className="text-xs text-slate-400 hover:text-white transition-colors hidden sm:flex items-center gap-1"
           >
-            API <ExternalLink className="h-3 w-3" />
+            GitHub <ExternalLink className="h-3 w-3" />
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/swayam-agarwal/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-slate-400 hover:text-sky-400 transition-colors hidden sm:flex items-center gap-1"
+          >
+            LinkedIn <ExternalLink className="h-3 w-3" />
           </a>
         </div>
       </header>
+
 
       <VideoLibraryDrawer
         isOpen={showLibrary}

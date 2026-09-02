@@ -19,7 +19,7 @@ YOUTUBE_VIDEO_ID = extract_video_id(_raw_url_or_id)
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
 FAISS_INDEX_PATH = "faiss_index"
-LOCAL_TRANSCRIPT_PATH = "transcript.txt"
+
 
 # Retriever settings
 RETRIEVAL_K = 4

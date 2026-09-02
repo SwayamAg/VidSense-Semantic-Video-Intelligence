@@ -12,7 +12,6 @@ from config import (
     CHUNK_SIZE, 
     CHUNK_OVERLAP, 
     FAISS_INDEX_PATH, 
-    LOCAL_TRANSCRIPT_PATH,
     get_embeddings
 )
 
@@ -92,9 +91,10 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         print(f"[WARNING] yt-dlp extraction failed: {e}")
         return None
 
-def fetch_transcript_from_youtube(video_id: str) -> Optional[str]:
+def fetch_transcript_from_youtube(video_id: str) -> str:
     """
-    Advanced fetcher that prioritizes yt-dlp for robustness.
+    Fetches transcript from YouTube using yt-dlp first, then youtube-transcript-api.
+    Raises ValueError with descriptive reasoning if no transcript is available.
     """
     # 1. Try yt-dlp (Pro)
     transcript = fetch_transcript_with_ytdlp(video_id)
@@ -116,34 +116,28 @@ def fetch_transcript_from_youtube(video_id: str) -> Optional[str]:
             transcript_obj = next(iter(transcript_list))
             
         data = transcript_obj.fetch()
-        return " ".join([t['text'] for t in data])
-
-        
+        full_text = " ".join([t['text'] for t in data])
+        if full_text.strip():
+            return full_text
+            
     except Exception as e:
-        print(f"\033[91m[NOTICE]\033[0m Live transcript not fetchable for this video.")
-        print(f"         Reason: {str(e)[:100]}...")
-        return None
+        error_str = str(e)
+        if "Subtitles are disabled" in error_str or "No transcripts were found" in error_str:
+            raise ValueError("This YouTube video does not have closed captions/subtitles enabled by the creator.")
+        elif "Too Many Requests" in error_str or "429" in error_str:
+            raise ValueError("YouTube API rate-limited caption requests. Please try again in a few moments.")
+        else:
+            raise ValueError(f"Unable to access video transcript: {error_str[:120]}")
 
-def fetch_transcript_from_local() -> Optional[str]:
-    """Attempts to fetch transcript from a local fallback file."""
-    if os.path.exists(LOCAL_TRANSCRIPT_PATH):
-        try:
-            print(f"[FETCH] Using local fallback file: {LOCAL_TRANSCRIPT_PATH}")
-            loader = TextLoader(LOCAL_TRANSCRIPT_PATH, encoding='utf-8')
-            docs = loader.load()
-            return docs[0].page_content
-        except Exception as e:
-            print(f"[ERROR] Local fallback failed: {e}")
-    return None
+    raise ValueError("No English or supported language subtitles could be found for this video.")
 
 def get_or_create_vector_store(video_id: str):
-    """Manages the Vector Store lifecycle for a specific video_id."""
+    """
+    Manages the Vector Store lifecycle for a specific video_id.
+    Raises ValueError or RuntimeError on failures with explanatory details.
+    """
     embeddings = get_embeddings()
-    is_fallback = False
-    
-    # Use unique index path per video to avoid loading old data from other videos
     index_path = os.path.join(FAISS_INDEX_PATH, video_id)
-    fallback_index_path = os.path.join(FAISS_INDEX_PATH, "local_fallback")
     
     # 1. Check if a persistent index for THIS video exists on disk
     if os.path.exists(index_path):
@@ -153,25 +147,9 @@ def get_or_create_vector_store(video_id: str):
         except Exception as e:
             print(f"[RECOVERY] Local index corrupted: {e}. Re-indexing...")
 
-    # 2. Try to fetch and index NEW transcript
+    # 2. Try to fetch and index NEW transcript directly from YouTube
     print(f"[INDEX] Initializing ingestion pipeline for Video ID: {video_id}...")
     transcript = fetch_transcript_from_youtube(video_id)
-    
-    # 3. Handle Fallback if fetch fails
-    if not transcript:
-        print(f"\033[93m[FALLBACK]\033[0m Transcript fetch failed. Shifting to default local transcript...")
-        is_fallback = True
-        # Check if we already have a saved index for the fallback file
-        if os.path.exists(fallback_index_path):
-             return FAISS.load_local(fallback_index_path, embeddings, allow_dangerous_deserialization=True), True
-        transcript = fetch_transcript_from_local()
-        save_path = fallback_index_path
-    else:
-        save_path = index_path
-        
-    if not transcript:
-        print(f"\n\033[91m[CRITICAL]\033[0m No data found! Provide a '{LOCAL_TRANSCRIPT_PATH}' file to proceed.")
-        return None, False
         
     # Semantic Chunking & Vectorization
     print(f"[PROCESS] Splitting text into chunks...")
@@ -180,10 +158,11 @@ def get_or_create_vector_store(video_id: str):
     vector_store = FAISS.from_documents(chunks, embeddings)
     
     # Persistence
-    vector_store.save_local(save_path)
-    print(f"[INDEX] Index persisted at '{save_path}'.")
+    vector_store.save_local(index_path)
+    print(f"[INDEX] Index persisted at '{index_path}'.")
     
-    return vector_store, is_fallback
+    return vector_store, False
+
 
 if __name__ == "__main__":
     from config import YOUTUBE_VIDEO_ID

@@ -47,14 +47,15 @@
 ---
 
 ## 💡 Solution Overview
-**YT-RAG Bot** combines a triple-redundant ingestion pipeline (`yt-dlp` → `youtube-transcript-api` → local fallback) with isolated FAISS vector indexing and an interactive **3-Pane Next.js Research Workspace**. Every AI claim is grounded in verifiable timestamps; clicking any citation `[▶ MM:SS]` automatically seeks the embedded video player to that exact moment.
+**YT-RAG Bot** combines a robust, multi-dialect ingestion pipeline (`yt-dlp` pro-fetch → `youtube-transcript-api` fallback) supporting international English variants and Hindi with strict error handling and diagnosis. Every AI claim is grounded in verifiable timestamps; clicking any citation `[▶ MM:SS]` automatically seeks the embedded video player to that exact moment.
 
 ---
 
 ## 📈 Business & Engineering Impact
 - ⚡ **95% Time Saved**: Retrieve timestamped answers from hour-long videos in sub-seconds.
 - ⏱️ **Zero Waiting (SSE Streaming)**: Sub-second Time-to-First-Token (TTFT) via Server-Sent Events.
-- 🛡️ **Near-100% Ingestion Reliability**: Fallback hierarchy eliminates single points of failure in video data acquisition.
+- 🌐 **Global Dialect Coverage**: Automatic recognition across `en`, `en-orig`, `en-US`, `en-GB`, `en-IN`, `en-CA`, `en-AU`, `en-IE`, `en-NZ`, `en-ZA`, and `hi`.
+- 🔍 **Strict Context Integrity**: Zero silent dummy data injection. If captions are disabled or unavailable, the system diagnoses and displays precise reasoning on the UI.
 - 💰 **Zero-Redundancy Compute**: Vector indices are persisted locally; previously ingested videos cost $0 in repeat embedding tokens.
 - 🔌 **Full-Stack Architecture**: Clean decoupling between Next.js frontend, FastAPI backend, and persistent FAISS storage.
 
@@ -65,10 +66,12 @@
 - 🖥️ **3-Pane Next.js AI Workspace**: Synchronized layout with Embedded Video Player, Streaming AI Chat, and Retrieved Knowledge.
 - 🎬 **Clickable Video Citations**: Clicking any `[▶ MM:SS]` badge in the chat, sources, or transcript automatically commands the YouTube player to jump and play.
 - ⚡ **Real-Time Token Streaming (SSE)**: Powered by FastAPI `StreamingResponse` and LangChain `chain.stream()` for sub-second responses.
+- 🌐 **Global Multi-Dialect Subtitle Support**: Deep language compatibility across international English tracks (`en`, `en-orig`, `en-US`, `en-GB`, `en-IN`, `en-CA`, etc.) and Hindi.
+- 🛡️ **Intelligent Error Diagnosis**: Real-time diagnostic cards on the UI distinguishing backend connection issues from disabled/unsupported video subtitles.
 - 📄 **Full Searchable Transcript Modal**: Filter and read through every spoken line of the video with instant playback jumping.
 - 🗄️ **Indexed Video Library Drawer**: Switch between previously ingested video knowledge bases on disk with 1 click.
-- 🛡️ **Triple-Redundancy Ingestion Engine**: Automatic failover between `yt-dlp`, standard scraper, and local fallback files.
 - 🐳 **Full Dockerization**: One-command deployment with Docker and Docker Compose with persistent volume mounts.
+
 
 ---
 
@@ -144,8 +147,9 @@ YT-RAG_BOT/
 │       ├── api.ts                    # Typed API Client & SSE Stream Consumer
 │       └── utils.ts                  # Class Merging & Timestamp Parser
 ├── config.py                         # Central Configuration & OpenAI Factories
-├── ingestion.py                      # Triple-Redundancy ETL Pipeline
+├── ingestion.py                      # Multi-Dialect Subtitle ETL & Vector Indexer
 ├── rag_chain.py                      # LCEL RAG Prompt & Pipeline Assembly
+
 ├── utils.py                          # Regex Extractors & oEmbed Helpers
 ├── main.py                           # Interactive Terminal CLI
 ├── Dockerfile                        # Production Backend Container

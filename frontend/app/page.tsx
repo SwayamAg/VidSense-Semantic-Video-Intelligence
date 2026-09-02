@@ -14,8 +14,10 @@ import {
   Clock, 
   ExternalLink,
   Cpu,
-  Globe
+  Globe,
+  AlertCircle
 } from "lucide-react";
+
 
 
 import { useRouter } from "next/navigation";
@@ -283,12 +285,32 @@ export default function Home() {
             </div>
 
 
-            {/* Error banner */}
+            {/* Structured Error banner */}
             {errorMessage && (
-              <div className="p-3 mb-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-xs">
-                {errorMessage}
+              <div className="p-4 mb-5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs flex items-start gap-3 animate-in fade-in duration-200">
+                <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <div className="font-semibold text-red-300">
+                    {errorMessage.toLowerCase().includes("failed to fetch") || errorMessage.toLowerCase().includes("network")
+                      ? "FastAPI Backend Connection Error"
+                      : errorMessage.toLowerCase().includes("subtitles") || errorMessage.toLowerCase().includes("transcript")
+                      ? "YouTube Transcript Access Restricted"
+                      : "Ingestion Pipeline Error"}
+                  </div>
+                  <p className="text-red-300/90 leading-relaxed">
+                    {errorMessage}
+                  </p>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    {errorMessage.toLowerCase().includes("subtitles")
+                      ? "Reason: The video creator has not published captions or automated transcription is disabled for this upload."
+                      : errorMessage.toLowerCase().includes("failed to fetch")
+                      ? "Reason: Unable to reach the backend service. Ensure the FastAPI container is active and CORS headers are open."
+                      : "Reason: The extraction service encountered an unexpected error while resolving this video stream."}
+                  </p>
+                </div>
               </div>
             )}
+
 
             {/* Pipeline progress items */}
             <div className="space-y-3">

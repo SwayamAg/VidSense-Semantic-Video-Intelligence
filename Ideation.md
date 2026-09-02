@@ -973,3 +973,22 @@ Prioritize in this order:
 
 The core long-term goal is to evolve YT-RAGBot from a **working RAG demo** into a **measurable, production-style RAG system**.
 
+---
+
+# Multi-Dialect Subtitle Coverage & Strict Error Handling Architecture
+
+### 1. Multi-Dialect Subtitle Ingestion Hierarchy
+YouTube hosts creator subtitles across various international English dialects and regional language tags. The ingestion engine recognizes:
+- Priority English Tracks: `en-orig` (original audio track), `en` (canonical), `en-US`, `en-GB`, `en-IN`, `en-CA`, `en-AU`, `en-IE`, `en-NZ`, `en-ZA`, `en-SG`, `en-PH`
+- Regional Language: `hi`, `hi-latn`
+- Fuzzy dialect matching across any custom track prefixed with `en`
+
+### 2. Zero-Dummy Policy & Explicit UI Error Diagnosis
+To preserve scientific grounding and context fidelity:
+- **No Dummy Fallback Files**: The static `transcript.txt` fallback is deprecated and deleted. A video must be indexed from its authentic transcript.
+- **Explicit Error Categorization**:
+  - `FastAPI Backend Connection Error`: Network / CORS / service offline status.
+  - `YouTube Transcript Access Restricted`: Creator has turned off captions or auto-generated subtitles are blocked by YouTube for this upload.
+  - `Ingestion Pipeline Error`: Detailed error reasoning forwarded from `yt-dlp` or `youtube-transcript-api`.
+
+

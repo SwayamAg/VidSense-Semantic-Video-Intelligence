@@ -30,6 +30,20 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         'en-ie', 'en-nz', 'en-za', 'en-sg', 'en-ph', 'hi', 'hi-latn'
     ]
 
+    # 1. Check for cookie file or environment variable
+    cookie_file = None
+    if os.path.exists("cookies.txt"):
+        cookie_file = "cookies.txt"
+    elif os.getenv("YOUTUBE_COOKIES"):
+        # If passed as multiline env var in Render, write to temp file
+        cookie_path = os.path.join(os.getcwd(), ".youtube_cookies.txt")
+        try:
+            with open(cookie_path, "w", encoding="utf-8") as f:
+                f.write(os.getenv("YOUTUBE_COOKIES", ""))
+            cookie_file = cookie_path
+        except Exception:
+            pass
+
     ydl_opts = {
         'skip_download': True,
         'writeautomaticsub': True,
@@ -47,6 +61,12 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
             'Accept-Language': 'en-US,en;q=0.9',
         }
     }
+
+    if cookie_file:
+        ydl_opts['cookiefile'] = cookie_file
+        # When cookies are present, also enable web and mweb clients
+        ydl_opts['extractor_args']['youtube']['player_client'] = ['android', 'mweb', 'web']
+
 
 
     

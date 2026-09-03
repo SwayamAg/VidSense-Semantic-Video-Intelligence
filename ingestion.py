@@ -82,12 +82,20 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
     
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
+            # Passing process=False extracts metadata and subtitles directly without failing on video stream format checks
+            try:
+                info = ydl.extract_info(url, download=False, process=False)
+            except Exception:
+                info = ydl.extract_info(url, download=False)
             
+            if not info:
+                return None
+
             # Prioritize manual subtitles over automatic ones
             subtitles = info.get('subtitles') or info.get('automatic_captions')
             if not subtitles:
                 return None
+
                 
             chosen_key = None
             # 1. Exact or prefix match against priority English dialects

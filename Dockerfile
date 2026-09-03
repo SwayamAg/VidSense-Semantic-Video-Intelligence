@@ -9,11 +9,13 @@ ENV PORT=8000
 
 WORKDIR /app
 
-# Install system dependencies (ffmpeg for yt-dlp, curl for healthchecks)
+# Install system dependencies (ffmpeg for yt-dlp, nodejs for YouTube JS challenge solver, curl for healthchecks)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
+    nodejs \
     curl \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Install Python dependencies
 COPY requirements.txt .

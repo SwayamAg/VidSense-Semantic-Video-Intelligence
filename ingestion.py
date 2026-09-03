@@ -198,13 +198,10 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
             print(f"[DEBUG] yt-dlp attempt failed: {e}")
             continue
 
-    return None
-
-
-
     # 2. Standalone Direct Innertube captionTracks fallback with session cookiejar
     try:
         print(f"[FETCH] Attempting direct Innertube caption extraction for: {video_id}")
+
         import http.cookiejar
         session = requests.Session()
         if cookie_file and os.path.exists(cookie_file):

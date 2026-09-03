@@ -62,6 +62,7 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         'check_formats': False,
         'quiet': True,
         'no_warnings': True,
+        'js_runtimes': {'node': {}},
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
             'Accept-Language': 'en-US,en;q=0.9',
@@ -73,6 +74,7 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'ios', 'web', 'mweb']}}
     else:
         ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'ios', 'web']}}
+
 
 
 

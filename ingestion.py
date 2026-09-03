@@ -70,9 +70,9 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
 
     if cookie_file:
         ydl_opts['cookiefile'] = cookie_file
-        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['web', 'mweb', 'android']}}
+        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'ios', 'web', 'mweb']}}
     else:
-        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'web']}}
+        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'ios', 'web']}}
 
 
 
@@ -111,7 +111,7 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                 json_fmt = next((f['url'] for f in formats if f.get('ext') == 'json3'), None)
                 if json_fmt:
                     sub_headers = {
-                        'User-Agent': 'com.google.android.youtube/19.29.37 (Linux; U; Android 11; Pixel 5)',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
                         'Accept-Language': 'en-US,en;q=0.9',
                     }
                     resp = requests.get(json_fmt, headers=sub_headers, timeout=10)
@@ -136,11 +136,22 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         print(f"[WARNING] yt-dlp extraction failed: {e}")
 
 
-    # 2. Standalone Direct Innertube captionTracks fallback if yt-dlp fails or is blocked
+    # 2. Standalone Direct Innertube captionTracks fallback with session cookiejar
     try:
         print(f"[FETCH] Attempting direct Innertube caption extraction for: {video_id}")
+        import http.cookiejar
+        session = requests.Session()
+        if cookie_file and os.path.exists(cookie_file):
+            jar = http.cookiejar.MozillaCookieJar(cookie_file)
+            try:
+                jar.load(ignore_discard=True, ignore_expires=True)
+                session.cookies = jar
+            except Exception:
+                pass
+
         page_url = f"https://www.youtube.com/watch?v={video_id}"
-        page_res = requests.get(page_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'}, timeout=5)
+        req_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'}
+        page_res = session.get(page_url, headers=req_headers, timeout=5)
         key = '"captionTracks":'
         pos = page_res.text.find(key)
         if pos != -1:
@@ -152,7 +163,8 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                 base_url = chosen.get('baseUrl')
                 if base_url:
                     cap_url = base_url + "&fmt=json3" if "fmt=" not in base_url else base_url
-                    cap_res = requests.get(cap_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'}, timeout=5)
+                    cap_res = session.get(cap_url, headers=req_headers, timeout=5)
+
                     if cap_res.status_code == 200 and cap_res.text.strip():
                         c_data = cap_res.json()
                         direct_events = []

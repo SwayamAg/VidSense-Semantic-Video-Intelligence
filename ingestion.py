@@ -59,6 +59,7 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         'writeautomaticsub': True,
         'writesubtitles': True,
         'subtitleslangs': ['en.*', 'en', 'hi.*', 'hi'],
+        'check_formats': False,
         'quiet': True,
         'no_warnings': True,
         'http_headers': {
@@ -72,6 +73,7 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         ydl_opts['extractor_args'] = {'youtube': {'player_client': ['web', 'mweb', 'android']}}
     else:
         ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'web']}}
+
 
 
 

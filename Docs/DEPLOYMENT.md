@@ -32,7 +32,7 @@ This gives you **automatic CI/CD**, zero server maintenance, global Edge caching
    NEXT_PUBLIC_API_URL = https://yt-rag-bot-semantic-video-intelligence.onrender.com
    ```
 4. Click **Deploy**.
-5. **Live Frontend Demo**: [https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
+5. **Live Frontend Demo**: [https://vidsense-semantic-video-intelligence.vercel.app/](https://vidsense-semantic-video-intelligence.vercel.app/)
 
 
 ---

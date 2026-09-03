@@ -16,7 +16,7 @@
 
 ## 🌐 Live Website
 
-[![Live Website](https://img.shields.io/badge/▶_Live_Demo-Visit_Website-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
+[![Live Website](https://img.shields.io/badge/▶_Live_Demo-Visit_Website-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](https://vidsense-semantic-video-intelligence.vercel.app/)
 
 ---
 

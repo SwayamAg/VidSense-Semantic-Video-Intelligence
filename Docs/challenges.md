@@ -54,7 +54,32 @@ This document tracks the comprehensive list of architectural, infrastructure, AP
   ```
 - **Root Cause**: Google Cloud enforces an OAuth2 requirement on `captions.download`. While public metadata and track lists are accessible via API keys, actual caption file downloads require OAuth2 tokens belonging to the authorized channel owner.
 - **Solution**:
-  - Implemented multi-stage ingestion: `yt-dlp` Android client first, official API metadata validation second, followed by proxy/session cookie support (`--cookies-from-browser` or `YOUTUBE_COOKIES` environment variable) for enterprise cloud deployments.
+  - Implemented multi-stage ingestion: `yt-dlp` mobile emulation first, official API metadata validation second, and authenticated session cookies for cloud datacenter environments.
+
+---
+
+### Challenge 1.2c: Cloud Datacenter Session Cookies Mount Paths
+- **Symptom**: Cloud deployments on Render continued throwing `Sign in to confirm you're not a bot` even after uploading a `cookies.txt` secret file in the dashboard.
+- **Root Cause**: Cloud PaaS platforms mount secret files into specific system directories (e.g. Render mounts secret files at `/etc/secrets/cookies.txt`, whereas Docker containers run at `/app`). Hardcoding `./cookies.txt` failed to detect the mounted cloud credentials.
+- **Solution**:
+  - Configured multi-path cookie discovery in `ingestion.py` inspecting:
+    1. `/etc/secrets/cookies.txt` (Render Secret File)
+    2. `/app/cookies.txt` (Docker root)
+    3. `./cookies.txt` (Local working directory)
+    4. `YOUTUBE_COOKIES` environment variable (dynamic ephemeral secret fallback).
+
+---
+
+### Challenge 1.2d: `yt-dlp` Video Format Verification Failure (`Requested format is not available`)
+- **Symptom**: `yt-dlp` successfully authenticated with session cookies but threw an extraction error:
+  ```text
+  ERROR: [youtube] jXwOcpkMQAA: Requested format is not available. Use --list-formats for a list of available formats
+  ```
+- **Root Cause**: By default, `yt-dlp` validates video and audio media formats before resolving captions. When combined with `skip_download: True` on newer YouTube streaming experiments (SABR formats), format resolution threw a false-positive format error despite captions being available.
+- **Solution**:
+  - Added `'check_formats': False` into `ydl_opts`.
+  - Added a standalone direct Innertube player response extractor as an immediate zero-dependency fallback.
+
 
 ---
 

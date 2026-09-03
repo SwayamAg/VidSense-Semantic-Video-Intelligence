@@ -152,6 +152,8 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                                     formatted_events.append(f"[{time_str}] {text.strip()}")
                         if formatted_events:
                             return " ".join(formatted_events)
+                    else:
+                        print(f"[FETCH] json3 timedtext responded with status {resp.status_code}")
 
                 # 2. Try vtt / srv format fallback
                 other_fmt = next((f['url'] for f in formats if f.get('url')), None)
@@ -162,7 +164,10 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                         lines = [line.strip() for line in o_resp.text.splitlines() if line.strip() and not line.startswith('WEBVTT') and not line.startswith('NOTE') and not re.match(r'^\d+$', line) and not '-->' in line]
                         if lines:
                             return " ".join(lines)
+            else:
+                print(f"[FETCH] No matching subtitle key found in: {list(subtitles.keys())[:10]}")
         return None
+
 
     except Exception as e:
         print(f"[WARNING] yt-dlp extraction failed: {e}")

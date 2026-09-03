@@ -30,17 +30,27 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         'en-ie', 'en-nz', 'en-za', 'en-sg', 'en-ph', 'hi', 'hi-latn'
     ]
 
-    # 1. Check for cookie file or environment variable
+    # 1. Check for cookie file in standard paths or environment variable
     cookie_file = None
-    if os.path.exists("cookies.txt"):
-        cookie_file = "cookies.txt"
-    elif os.getenv("YOUTUBE_COOKIES"):
-        # If passed as multiline env var in Render, write to temp file
+    possible_paths = [
+        "cookies.txt",
+        "/etc/secrets/cookies.txt",
+        "/app/cookies.txt",
+        os.path.join(os.getcwd(), "cookies.txt")
+    ]
+    for p in possible_paths:
+        if os.path.exists(p):
+            cookie_file = p
+            print(f"[AUTH] Found active YouTube cookies at: {p}")
+            break
+
+    if not cookie_file and os.getenv("YOUTUBE_COOKIES"):
         cookie_path = os.path.join(os.getcwd(), ".youtube_cookies.txt")
         try:
             with open(cookie_path, "w", encoding="utf-8") as f:
                 f.write(os.getenv("YOUTUBE_COOKIES", ""))
             cookie_file = cookie_path
+            print("[AUTH] Generated cookies file from YOUTUBE_COOKIES env var.")
         except Exception:
             pass
 
@@ -51,19 +61,18 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         'subtitleslangs': ['en.*', 'en', 'hi.*', 'hi'],
         'quiet': True,
         'no_warnings': True,
-        'extractor_args': {
-            'youtube': {
-                'player_client': ['android']
-            }
-        },
         'http_headers': {
-            'User-Agent': 'com.google.android.youtube/19.29.37 (Linux; U; Android 11; Pixel 5)',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
             'Accept-Language': 'en-US,en;q=0.9',
         }
     }
 
     if cookie_file:
         ydl_opts['cookiefile'] = cookie_file
+        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['web', 'mweb', 'android']}}
+    else:
+        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'web']}}
+
 
 
 

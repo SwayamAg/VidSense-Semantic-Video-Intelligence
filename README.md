@@ -19,14 +19,12 @@
 
 [![Live Website](https://img.shields.io/badge/▶_Live_Demo-Visit_Website-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
 
----
-
-## 🎬 Product Demo Video
+## 🎬 Product Demo
 
 <div align="center">
-  <video src="https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence/raw/main/VidSense-Demo-Web.mp4" width="100%" controls poster="docs_demo_preview.jpg">
-    <p>Your browser does not support HTML5 video. <a href="VidSense-Demo-Web.mp4">Download or view demo video here</a>.</p>
-  </video>
+  <img src="demo.gif" alt="VidSense Demo Walkthrough" width="100%" />
+  <p><em>Full End-to-End Walkthrough: Ingestion → 3-Pane Workspace → Grounded Q&amp;A with [MM:SS] Timestamps → FAISS Knowledge Retrieval.</em></p>
+  <p><a href="VidSense-Demo-Web.mp4">▶ Download / Watch Full HD Video (1080p)</a></p>
 </div>
 
 ---

@@ -142,8 +142,8 @@ TIMESTAMPS:
 
 ### 1. Configure Environment
 ```bash
-git clone https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence.git
-cd YT-RAG-Bot-Semantic-Video-Intelligence
+git clone https://github.com/SwayamAg/VidSense.git
+cd VidSense
 cp .env.example .env
 ```
 

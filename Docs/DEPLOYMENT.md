@@ -1,6 +1,6 @@
-# 🚀 Production Deployment Guide for YT-RAG Bot
+# 🚀 Production Deployment Guide for VidSense
 
-This document provides step-by-step instructions for deploying **YT-RAG Bot** across the **three supported deployment models**:
+This document provides step-by-step instructions for deploying **VidSense** across the **three supported deployment models**:
 
 1. [Option 1: Vercel (Frontend) + Render / Railway (Backend) — *Recommended*](#option-1-vercel--render--railway-recommended)
 2. [Option 2: Single VM Server (Docker Compose + Nginx)](#option-2-single-vm-server-docker-compose--nginx)
@@ -14,7 +14,7 @@ This gives you **automatic CI/CD**, zero server maintenance, global Edge caching
 
 ### Step 1: Deploy Backend (Render)
 1. Go to [Render Dashboard](https://dashboard.render.com/) and click **New +** → **Blueprint**.
-2. Connect your GitHub repository: `SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence`.
+2. Connect your GitHub repository: `SwayamAg/VidSense`.
 3. Render will automatically detect [`render.yaml`](./render.yaml).
 4. In the **Environment Variables** prompt, add:
    - `OPENAI_API_KEY`: Your OpenAI API key (`sk-...`).
@@ -48,8 +48,8 @@ Best for running on a single cloud VPS (Hetzner, AWS EC2, DigitalOcean, Linode) 
 
 1. **Clone the Repository on the Server**:
    ```bash
-   git clone https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence.git
-   cd YT-RAG-Bot-Semantic-Video-Intelligence
+   git clone https://github.com/SwayamAg/VidSense.git
+   cd VidSense
    ```
 
 2. **Set up Environment Variables**:

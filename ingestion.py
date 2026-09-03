@@ -118,15 +118,26 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
 
             if chosen_key:
                 formats = subtitles[chosen_key]
+                # 1. Try json3 format
                 json_fmt = next((f['url'] for f in formats if f.get('ext') == 'json3'), None)
-                if json_fmt:
-                    sub_headers = {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-                        'Accept-Language': 'en-US,en;q=0.9',
-                    }
-                    resp = requests.get(json_fmt, headers=sub_headers, timeout=10)
-                    if resp.status_code == 200:
+                sub_headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+                    'Accept-Language': 'en-US,en;q=0.9',
+                }
+                
+                dl_session = requests.Session()
+                if cookie_file and os.path.exists(cookie_file):
+                    import http.cookiejar
+                    try:
+                        jar = http.cookiejar.MozillaCookieJar(cookie_file)
+                        jar.load(ignore_discard=True, ignore_expires=True)
+                        dl_session.cookies = jar
+                    except Exception:
+                        pass
 
+                if json_fmt:
+                    resp = dl_session.get(json_fmt, headers=sub_headers, timeout=10)
+                    if resp.status_code == 200 and resp.text.strip():
                         data = resp.json()
                         formatted_events = []
                         for event in data.get('events', []):
@@ -141,7 +152,18 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                                     formatted_events.append(f"[{time_str}] {text.strip()}")
                         if formatted_events:
                             return " ".join(formatted_events)
+
+                # 2. Try vtt / srv format fallback
+                other_fmt = next((f['url'] for f in formats if f.get('url')), None)
+                if other_fmt:
+                    o_resp = dl_session.get(other_fmt, headers=sub_headers, timeout=10)
+                    if o_resp.status_code == 200 and o_resp.text.strip():
+                        import re
+                        lines = [line.strip() for line in o_resp.text.splitlines() if line.strip() and not line.startswith('WEBVTT') and not line.startswith('NOTE') and not re.match(r'^\d+$', line) and not '-->' in line]
+                        if lines:
+                            return " ".join(lines)
         return None
+
     except Exception as e:
         print(f"[WARNING] yt-dlp extraction failed: {e}")
 

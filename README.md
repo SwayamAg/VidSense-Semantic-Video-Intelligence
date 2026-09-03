@@ -2,7 +2,6 @@
 
 > **Full-stack, containerized AI video intelligence engine turning any YouTube video into an interactive, timestamp-grounded knowledge base with Next.js App Router, FastAPI, and FAISS.**
 
-
 ![Python](https://img.shields.io/badge/python-3.10-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
@@ -19,48 +18,44 @@
 
 [![Live Website](https://img.shields.io/badge/▶_Live_Demo-Visit_Website-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
 
+---
+
 ## 🎬 Product Demo
 
 <div align="center">
   <img src="demo.gif" alt="VidSense Demo Walkthrough" width="100%" />
-  <p><em>Real-time semantic ingestion, timestamp-grounded Q&amp;A, and FAISS vector retrieval.</em></p>
+  <p>
+    <em>
+      End-to-end walkthrough showing automated transcript ingestion, isolated FAISS vector indexing, 
+      real-time streaming conversational Q&amp;A, and interactive timestamp citations that seek the video player to exact moments.
+    </em>
+  </p>
 </div>
 
 ---
 
-## 🎯 Problem Statement
-- **Long-form Video Inefficiency**: Searching for specific concepts inside 1-3 hour lectures, podcasts, and documentaries requires tedious manual scrubbing.
-- **Scraper Fragility**: Standard transcript scraping APIs frequently fail due to rate limits or dynamic bot blocks.
-- **LLM Hallucinations**: Generic LLMs invent facts when asked about specific long-form video details without context grounding.
+## 🎯 Why VidSense (Problem Statement)
+- **Long-form Video Inefficiency**: Locating specific insights inside 1–3 hour lectures, podcasts, or technical keynotes requires tedious manual scrubbing.
+- **Scraper Fragility**: Standard transcript scraping frequently breaks due to client signature challenges and cloud IP restrictions.
+- **LLM Hallucinations**: Generic LLMs invent facts when asked about long-form video details without context grounding.
 
 ---
 
 ## 💡 Solution Overview
-**YT-RAG Bot** combines a robust, multi-dialect ingestion pipeline (`yt-dlp` pro-fetch → `youtube-transcript-api` fallback) supporting international English variants and Hindi with strict error handling and diagnosis. Every AI claim is grounded in verifiable timestamps; clicking any citation `[▶ MM:SS]` automatically seeks the embedded video player to that exact moment.
-
----
-
-## 📈 Business & Engineering Impact
-- ⚡ **95% Time Saved**: Retrieve timestamped answers from hour-long videos in sub-seconds.
-- ⏱️ **Zero Waiting (SSE Streaming)**: Sub-second Time-to-First-Token (TTFT) via Server-Sent Events.
-- 🌐 **Global Dialect Coverage**: Automatic recognition across `en`, `en-orig`, `en-US`, `en-GB`, `en-IN`, `en-CA`, `en-AU`, `en-IE`, `en-NZ`, `en-ZA`, and `hi`.
-- 🔍 **Strict Context Integrity**: Zero silent dummy data injection. If captions are disabled or unavailable, the system diagnoses and displays precise reasoning on the UI.
-- 💰 **Zero-Redundancy Compute**: Vector indices are persisted locally; previously ingested videos cost $0 in repeat embedding tokens.
-- 🔌 **Full-Stack Architecture**: Clean decoupling between Next.js frontend, FastAPI backend, and persistent FAISS storage.
+**VidSense** connects an automated, multi-tier ingestion pipeline (`yt-dlp` mobile-first endpoints with JS runtime + direct timedtext scrapers) to an isolated FAISS vector search layer and an OpenAI LLM. AI answers reference verified video timestamps; clicking any citation `[▶ MM:SS]` seeks the embedded video player to that exact moment.
 
 ---
 
 ## 🚀 Key Features
 
-- 🖥️ **3-Pane Next.js AI Workspace**: Synchronized layout with Embedded Video Player, Streaming AI Chat, and Retrieved Knowledge.
+- 🖥️ **3-Pane Next.js AI Workspace**: Synchronized layout featuring an Embedded Video Player, Streaming AI Chat, and Retrieved Knowledge.
 - 🎬 **Clickable Video Citations**: Clicking any `[▶ MM:SS]` badge in the chat, sources, or transcript automatically commands the YouTube player to jump and play.
-- ⚡ **Real-Time Token Streaming (SSE)**: Powered by FastAPI `StreamingResponse` and LangChain `chain.stream()` for sub-second responses.
+- ⚡ **Real-Time Token Streaming (SSE)**: Powered by FastAPI `StreamingResponse` and LangChain `chain.stream()` for fast, responsive answers.
 - 🌐 **Global Multi-Dialect Subtitle Support**: Deep language compatibility across international English tracks (`en`, `en-orig`, `en-US`, `en-GB`, `en-IN`, `en-CA`, etc.) and Hindi.
-- 🛡️ **Intelligent Error Diagnosis**: Real-time diagnostic cards on the UI distinguishing backend connection issues from disabled/unsupported video subtitles.
+- 🛡️ **Intelligent Error Diagnosis**: Real-time diagnostic alerts distinguishing backend connectivity from disabled/unsupported video subtitles.
 - 📄 **Full Searchable Transcript Modal**: Filter and read through every spoken line of the video with instant playback jumping.
 - 🗄️ **Indexed Video Library Drawer**: Switch between previously ingested video knowledge bases on disk with 1 click.
 - 🐳 **Full Dockerization**: One-command deployment with Docker and Docker Compose with persistent volume mounts.
-
 
 ---
 
@@ -100,53 +95,45 @@ graph LR
 | :--- | :--- | :--- |
 | **Frontend** | [Next.js 16 (App Router)](https://nextjs.org/) + [TypeScript](https://www.typescriptlang.org/) | Modern 3-pane research workspace with responsive UI |
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) + [Lucide Icons](https://lucide.dev/) | Dark glassmorphism, glowing accents, and micro-interactions |
-| **Backend API** | [FastAPI](https://fastapi.tiangolo.com/) + [Uvicorn](https://www.uvicorn.org/) | High-performance asynchronous REST & SSE streaming server |
+| **Backend API** | [FastAPI](https://fastapi.tiangolo.com/) + [Uvicorn](https://www.uvicorn.org/) | Asynchronous REST & SSE streaming server |
 | **Orchestration** | [LangChain](https://www.langchain.com/) (LCEL) | Declarative RAG chaining and prompt templates |
 | **LLM & Embeddings** | [OpenAI API](https://openai.com/) | `gpt-4o-mini` & `text-embedding-3-small` (1536 dims) |
 | **Vector DB** | [FAISS](https://github.com/facebookresearch/faiss) | In-memory similarity search with local disk serialization |
-| **Ingestion** | `yt-dlp` + `youtube-transcript-api` | Robust automated caption & subtitle extraction |
+| **Ingestion** | `yt-dlp` + Node.js JS Runtime + Fallbacks | Multi-tier automated subtitle extraction |
 | **Container** | [Docker](https://www.docker.com/) + Docker Compose | Containerized reproducible execution |
 
 ---
 
-## 📁 Project Structure
+## 📈 Engineering Highlights
+
+- ⚡ **Low-Latency Streaming**: Progressive token streaming via Server-Sent Events (SSE) reduces perceived response latency.
+- 🌐 **Multi-Dialect Compatibility**: Automatic subtitle resolution across regional English variants and Hindi tracks.
+- 🔍 **Strict Context Grounding**: Responses are bounded to retrieved transcript chunks with clickable timestamp references.
+- 💰 **Local Vector Caching**: Vector indices are serialized to disk by video ID, avoiding redundant re-embedding compute for repeat queries.
+- 🔌 **Decoupled Architecture**: Clean separation between the Next.js UI, FastAPI API layer, and FAISS vector index store.
+
+---
+
+## 💬 Verified Example Q&A Output
+
+**Video**: *[What's The Most Expensive Thing Ever? (jXwOcpkMQAA)](https://www.youtube.com/watch?v=jXwOcpkMQAA)*
 
 ```text
-YT-RAG_BOT/
-├── Docs/                             # Architectural, Challenge & Production Specs
-├── app/                              # FastAPI Service Layer
+OVERVIEW:
+Antimatter is discussed as the most expensive substance in existence.
 
-│   ├── api/
-│   │   └── routes.py                 # REST & SSE Endpoints (/stream, /chat, /search, /transcript)
-│   ├── models/
-│   │   └── schemas.py                # Pydantic Request/Response Models
-│   ├── services/
-│   │   └── rag_service.py            # Business Logic & SSE Generator Layer
-│   └── main.py                       # FastAPI App Entrypoint, CORS & Lifespan
-├── frontend/                         # Next.js Full-Stack Workspace
-│   ├── app/
-│   │   ├── layout.tsx                # Inter Typography & Dark Theme Root
-│   │   ├── page.tsx                  # Ingestion Landing Page & Health Indicator
-│   │   └── workspace/page.tsx        # 3-Pane AI Research Workspace Route
-│   ├── components/
-│   │   ├── video/VideoPane.tsx       # Embedded Synced YouTube Player
-│   │   ├── video/TranscriptModal.tsx # Full Searchable Transcript Viewer
-│   │   ├── chat/ChatPane.tsx         # Real-Time SSE Chat with [▶ MM:SS] Pills
-│   │   ├── knowledge/KnowledgePane.tsx # Raw Semantic Vector Search
-│   │   └── navigation/VideoLibraryDrawer.tsx # Disk Index Library Drawer
-│   └── lib/
-│       ├── api.ts                    # Typed API Client & SSE Stream Consumer
-│       └── utils.ts                  # Class Merging & Timestamp Parser
-├── config.py                         # Central Configuration & OpenAI Factories
-├── ingestion.py                      # Multi-Dialect Subtitle ETL & Vector Indexer
-├── rag_chain.py                      # LCEL RAG Prompt & Pipeline Assembly
+CORE WORKFLOW / KEY CONCEPTS:
+- A single gram of antimatter releases energy equivalent to three Hiroshima nuclear bombs upon annihilation.
+- Production requires particle acceleration by firing particles at high speeds into a metal rod and capturing resulting debris.
 
-├── utils.py                          # Regex Extractors & oEmbed Helpers
-├── main.py                           # Interactive Terminal CLI
-├── Dockerfile                        # Production Backend Container
-├── docker-compose.yml                # Multi-service Container Orchestration
-├── requirements.txt                  # Pinned Python Dependencies
-└── .env.example                      # Environment Variable Template
+TECHNICAL HIGHLIGHTS:
+- Antimatter production requires extreme vacuum conditions and particle acceleration techniques.
+- CERN has generated less than 10 billionths of a gram throughout its entire operational history.
+
+TIMESTAMPS:
+- [07:37] Introduction to antimatter and energy potential.
+- [07:51] Antimatter annihilation energy comparison.
+- [08:10] Antimatter production mechanics and particle acceleration challenges.
 ```
 
 ---
@@ -169,7 +156,6 @@ OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 # Optional: Google Cloud YouTube Data API v3 Key
 YOUTUBE_API_KEY=AIzaSy...
 ```
-
 
 ---
 
@@ -200,13 +186,12 @@ Open **`http://localhost:3000`** in your browser!
 
 ---
 
-### 4. Or Run via Docker Compose (Local Development)
+### 4. Or Run via Docker Compose
 ```bash
 docker compose up --build
 ```
 
 ---
-
 
 ## 🌐 REST API Reference
 
@@ -224,33 +209,9 @@ docker compose up --build
 
 ---
 
-## 💬 Verified Example Q&A Output
-
-**Video**: *[What's The Most Expensive Thing Ever? (jXwOcpkMQAA)](https://www.youtube.com/watch?v=jXwOcpkMQAA)*
-
-```text
-OVERVIEW:
-Antimatter is discussed as the most expensive substance in existence.
-
-CORE WORKFLOW / KEY CONCEPTS:
-- A single gram of antimatter releases energy equivalent to three Hiroshima nuclear bombs upon annihilation.
-- Production requires particle acceleration by firing particles at high speeds into a metal rod and capturing resulting debris.
-
-TECHNICAL HIGHLIGHTS:
-- Antimatter production requires extreme vacuum conditions and particle acceleration techniques.
-- CERN has generated less than 10 billionths of a gram throughout its entire operational history.
-
-TIMESTAMPS:
-- [07:37] Introduction to antimatter and energy potential.
-- [07:51] Antimatter annihilation energy comparison.
-- [08:10] Antimatter production mechanics and particle acceleration challenges.
-```
-
----
-
 ## 🔮 Future Scope & Evolution Roadmap
 
-> 📖 **Full Architectural Ideation**: For the complete technical ideation, UI design wireframes (`assistant-ui` + shadcn/ui), RAG evaluation methodology, and multi-video research roadmap, see the [Full-Stack Ideation Document](./Ideation.md).
+> 📖 **Full Architectural Ideation**: For the complete technical ideation, UI design wireframes, RAG evaluation methodology, and multi-video research roadmap, see the [Full-Stack Ideation Document](./Ideation.md).
 
 ### 🎯 V2 — Retrieval Quality & Intelligence (In Progress)
 - **🔀 Hybrid Search + Late-Interaction Reranking (`Dense + BM25 + FlashRank`)**
@@ -262,23 +223,16 @@ TIMESTAMPS:
   - *Why*: Provide an auto-generated structural outline of long lectures, allowing users to skim topics before querying.
   - *Implementation*: LLM-driven transcript segmentation clustering timestamps into thematic topic milestones.
 
-### 🔬 V2.5 — Experimental Multimodal Video Analysis Layer (`Adversal.AI`)
+### 🔬 V2.5 — Experimental Multimodal Video Analysis Layer
 - **Visual Video Intelligence (Optional Add-on)**
-  - *Concept*: An optional enrichment layer running alongside the core FAISS transcript pipeline (not replacing it).
-  - *Why*: Enables answering questions beyond audio transcripts, such as *"What architecture diagram is shown on screen at 12:32?"* or *"What terminal error was shown at 18:40?"*.
-  - *Evaluation Guardrails*: Rigorously benchmark API latency, OCR/diagram comprehension quality, and costs before considering any core dependency status. Pure transcript RAG remains the instant default path.
+  - *Concept*: An optional enrichment layer running alongside the core FAISS transcript pipeline.
+  - *Why*: Enables answering questions beyond audio transcripts, such as *"What architecture diagram is shown on screen at 12:32?"* or *"What error was shown in the terminal?"*.
 
 ### 🚀 V3 — Multi-Modal & Large-Scale Expansion
-- **🎬 Native Multi-Modal Video RAG (Keyframe Vector Search with ColPali / CLIP)**
-  - *Why*: Direct local embedding of video keyframes for visual similarity without third-party API dependencies.
-- **🎙️ Speaker Diarization (`whisperx` / `pyannote.audio`)**
-  - *Why*: In podcasts and debates, attributing statements correctly requires speaker identification tags (`[Host]` vs. `[Guest]`).
-- **⚡ Google TurboQuant / TurboVec / Qdrant Enterprise Scaling**
-  - *Why*: Scaling to thousands of video archives with ~8x memory compression and cloud persistence.
-- **📚 Multi-Video Workspace Research**
-  - *Why*: Query across playlist archives or related technical lectures simultaneously with cross-video synthesis.
-
-
+- **🎬 Native Keyframe Vector Search (ColPali / CLIP)**: Direct local embedding of video keyframes for visual similarity.
+- **🎙️ Speaker Diarization (`whisperx` / `pyannote.audio`)**: Attribution of statements to specific speakers (`[Host]` vs. `[Guest]`).
+- **⚡ Distributed Vector Scaling**: Integration with managed cloud vector databases for large-scale video archives.
+- **📚 Multi-Video Workspace Research**: Query across playlist archives or related lectures simultaneously with cross-video synthesis.
 
 ---
 
@@ -288,4 +242,5 @@ TIMESTAMPS:
 - **LinkedIn**: [linkedin.com/in/swayam-agarwal](https://www.linkedin.com/in/swayam-agarwal/)  
 - **GitHub**: [github.com/SwayamAg](https://github.com/SwayamAg)  
 - **Email**: swayamagarwal19@gmail.com
+
 

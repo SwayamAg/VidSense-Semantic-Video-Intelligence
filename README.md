@@ -28,21 +28,6 @@
 
 ---
 
-## 📸 Interactive Workspace Architecture
-
-```text
-========================================================================================
-   📺 VID SENSE: 3-PANE SEMANTIC VIDEO INTELLIGENCE WORKSPACE
-========================================================================================
-[Left Pane: Video Player]     [Center Pane: AI Research Chat]       [Right: Knowledge]
-- Responsive YouTube IFrame   - Real-Time SSE Token Streaming       - FAISS Similarity (k=4)
-- Live Seek to Exact Second   - Interactive [▶ MM:SS] Pill Badges   - Full Subtitle Viewer
-- One-Click Transcript Jump   - One-Click Answer Copying            - Cached Video Library
-========================================================================================
-```
-
----
-
 ## 🎯 Problem Statement
 - **Long-form Video Inefficiency**: Searching for specific concepts inside 1-3 hour lectures, podcasts, and documentaries requires tedious manual scrubbing.
 - **Scraper Fragility**: Standard transcript scraping APIs frequently fail due to rate limits or dynamic bot blocks.

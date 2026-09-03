@@ -23,8 +23,6 @@
 
 ## 🎬 Product Demo Video
 
-> **Full End-to-End Walkthrough**: Ingesting video `0_Gp86bvGmQ` ("12 CRINGIEST Tech Fails of all time") → 5-Step RAG Extraction & Vector Indexing → 3-Pane Research Workspace → Streamed AI Q&A with clickable `[MM:SS]` timestamp citations seeking the video player → FAISS Vector Knowledge Retrieval.
-
 <div align="center">
   <video src="https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence/raw/main/VidSense-Demo-Web.mp4" width="100%" controls poster="docs_demo_preview.jpg">
     <p>Your browser does not support HTML5 video. <a href="VidSense-Demo-Web.mp4">Download or view demo video here</a>.</p>

@@ -23,8 +23,7 @@
 
 <div align="center">
   <img src="demo.gif" alt="VidSense Demo Walkthrough" width="100%" />
-  <p><em>Full End-to-End Walkthrough: Ingestion → 3-Pane Workspace → Grounded Q&amp;A with [MM:SS] Timestamps → FAISS Knowledge Retrieval.</em></p>
-  <p><a href="VidSense-Demo-Web.mp4">▶ Download / Watch Full HD Video (1080p)</a></p>
+  <p><em>Real-time semantic ingestion, timestamp-grounded Q&amp;A, and FAISS vector retrieval.</em></p>
 </div>
 
 ---

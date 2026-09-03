@@ -123,12 +123,11 @@ export default function Home() {
         { ...prev[4], status: "done" },
       ]);
 
-      // Automatically redirect to 3-Pane Workspace after 800ms
-      setTimeout(() => {
-        router.push(`/workspace?v=${ingestRes.video_id}`);
-      }, 800);
+      // Keep pipeline modal open so user can clearly see all 5 completed steps
+      // Navigation occurs explicitly when the user clicks 'Open Research Workspace'
 
     } catch (err: unknown) {
+
 
       const msg = err instanceof Error ? err.message : "Failed to analyze video";
       setErrorMessage(msg);
@@ -370,21 +369,24 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Success Action */}
+            {/* Success Action - User Explicit Click to Launch Workspace */}
             {steps[4].status === "done" && (
-              <div className="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between">
-                <span className="text-xs text-emerald-400 font-medium">
-                  ✓ Ready for conversational reasoning
+              <div className="mt-6 pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  Index ready for conversational reasoning
                 </span>
                 <button
+                  type="button"
                   onClick={() => router.push(`/workspace?v=${videoInfo?.video_id}`)}
-                  className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs flex items-center gap-1.5 transition-all shadow-md"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-purple-950/40 cursor-pointer glow-purple animate-pulse"
                 >
-                  <span>Open Research Workspace</span>
+                  <span>Launch Research Workspace</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
             )}
+
 
           </div>
         )}

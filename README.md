@@ -15,21 +15,33 @@
 
 ---
 
-## 🌐 Live Demo
+## 🌐 Live Website & Demo
 
 [![Live Demo](https://img.shields.io/badge/▶_Live_Demo-Visit_Website-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](https://yt-rag-bot-semantic-video-intelligencefinal-bdsb8pfg2.vercel.app/)
+&nbsp;&nbsp;
+[![Render Backend](https://img.shields.io/badge/FastAPI_API-Live_Swagger_Docs-005571?style=for-the-badge&logo=fastapi&logoColor=white)](https://yt-rag-bot-semantic-video-intelligence.onrender.com/docs)
 
 ---
 
+## 🎬 Product Demo Walkthrough
 
+https://github.com/user-attachments/assets/vidsense-demo
 
+> **Full End-to-End Walkthrough**: Ingesting video `0_Gp86bvGmQ` ("12 CRINGIEST Tech Fails of all time") → 5-Step RAG Extraction & Vector Indexing → 3-Pane Research Workspace → Streamed AI Q&A with clickable `[MM:SS]` timestamp citations seeking the video player → FAISS Vector Knowledge Retrieval.
 
-## 📸 Interactive Workspace Preview
+<div align="center">
+  <video src="https://github.com/SwayamAg/YT-RAG-Bot-Semantic-Video-Intelligence/raw/main/VidSense-Demo-Web.mp4" width="100%" controls poster="docs_demo_preview.jpg">
+    <p>Your browser does not support HTML5 video. <a href="VidSense-Demo-Web.mp4">Download or view demo video here</a>.</p>
+  </video>
+</div>
 
+---
+
+## 📸 Interactive Workspace Architecture
 
 ```text
 ========================================================================================
-   📺 YT-RAG BOT: 3-PANE SEMANTIC VIDEO INTELLIGENCE WORKSPACE
+   📺 VID SENSE: 3-PANE SEMANTIC VIDEO INTELLIGENCE WORKSPACE
 ========================================================================================
 [Left Pane: Video Player]     [Center Pane: AI Research Chat]       [Right: Knowledge]
 - Responsive YouTube IFrame   - Real-Time SSE Token Streaming       - FAISS Similarity (k=4)

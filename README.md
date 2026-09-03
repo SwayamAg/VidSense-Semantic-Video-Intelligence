@@ -142,8 +142,8 @@ TIMESTAMPS:
 
 ### 1. Configure Environment
 ```bash
-git clone https://github.com/SwayamAg/VidSense.git
-cd VidSense
+git clone https://github.com/SwayamAg/VidSense-Semantic-Video-Intelligence.git
+cd VidSense-Semantic-Video-Intelligence
 cp .env.example .env
 ```
 

@@ -8,7 +8,7 @@ These changes have the highest priority and should be completed first.
 
 ### 1. Rebrand the application to VidSense
 
-Update visible product branding from YT-RAGBot to:
+Update visible product branding from VidSense to:
 
 **VidSense**
 

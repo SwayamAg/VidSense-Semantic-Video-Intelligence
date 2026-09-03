@@ -174,7 +174,7 @@ export default function Home() {
             <div className="h-4 w-px bg-white/10 hidden sm:block" />
 
             <a
-              href="https://github.com/SwayamAg/VidSense"
+              href="https://github.com/SwayamAg/VidSense-Semantic-Video-Intelligence"
               target="_blank"
               rel="noreferrer"
               className="text-xs text-slate-300 hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] transition-all font-medium"

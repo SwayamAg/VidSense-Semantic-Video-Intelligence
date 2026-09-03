@@ -1,8 +1,8 @@
-# YT-RAGBot — Full-Stack Development Ideation
+# VidSense — Full-Stack Development Ideation
 
 ## 1. Goal
 
-Upgrade the existing YT-RAGBot from a basic RAG/demo interface into a **production-style full-stack AI video knowledge assistant**.
+Upgrade the existing VidSense from a basic RAG/demo interface into a **production-style full-stack AI video knowledge assistant**.
 
 **Core flow:**
 
@@ -57,7 +57,7 @@ AI Elements provides AI-specific components such as Conversation, Message, Promp
 
 ### Backend
 
-Keep the existing YT-RAGBot backend:
+Keep the existing VidSense backend:
 
 * **Python**
 * **FastAPI**
@@ -89,7 +89,7 @@ Focus the homepage around one action:
 > **Paste a YouTube video and start asking questions.**
 
 ```text
-YT-RAGBot
+VidSense
 
 Chat with any YouTube video.
 
@@ -118,7 +118,7 @@ After processing a video:
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│ YT-RAGBot                              New Video   Settings │
+│ VidSense                              New Video   Settings │
 ├──────────────┬──────────────────────────────┬───────────────┤
 │              │                              │               │
 │ VIDEO        │          AI CHAT             │ KNOWLEDGE     │
@@ -393,7 +393,7 @@ Production deployment
 
 Build:
 
-> **YT-RAGBot — an interactive AI knowledge workspace that turns YouTube videos into searchable, citation-aware knowledge bases.**
+> **VidSense — an interactive AI knowledge workspace that turns YouTube videos into searchable, citation-aware knowledge bases.**
 
 The key portfolio differentiator should be:
 
@@ -519,7 +519,7 @@ Keep the application to **3 primary areas**:
 
 ```text
 ┌──────────────────────────────────────────────────────────────┐
-│ YT-RAGBot                              + New Video            │
+│ VidSense                              + New Video            │
 ├─────────────────┬────────────────────────────┬───────────────┤
 │                 │                            │               │
 │ VIDEO           │ CHAT                       │ SOURCES       │
@@ -538,7 +538,7 @@ Keep the application to **3 primary areas**:
 Only:
 
 ```text
-YT-RAGBot
+VidSense
 │
 ├── Home
 └── Current Video
@@ -617,7 +617,7 @@ If these 9 steps work smoothly, **ship the MVP.**
 Everything beyond this is optimization or expansion, not MVP scope.
 
 ---
-# YT-RAGBot — V2 & Future Scope
+# VidSense — V2 & Future Scope
 
 ## V2 — RAG Quality & Production Improvements
 
@@ -732,7 +732,7 @@ Do **not** migrate from FAISS just for the sake of using a "production" database
 
 # V2 — Video Intelligence
 
-Add features that make YT-RAGBot more than a generic RAG chatbot:
+Add features that make VidSense more than a generic RAG chatbot:
 
 * Automatic topic/chapter extraction
 * Topic-based video timeline
@@ -971,7 +971,7 @@ Prioritize in this order:
 
 **1. RAG quality → 2. Evaluation → 3. Scalability → 4. UX → 5. Advanced AI features**
 
-The core long-term goal is to evolve YT-RAGBot from a **working RAG demo** into a **measurable, production-style RAG system**.
+The core long-term goal is to evolve VidSense from a **working RAG demo** into a **measurable, production-style RAG system**.
 
 ---
 

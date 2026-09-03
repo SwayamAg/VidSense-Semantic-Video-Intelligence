@@ -1,6 +1,6 @@
 # 🛠️ Engineering Challenges & Technical Solutions: From 0 to Production MVP
 
-This document tracks the comprehensive list of architectural, infrastructure, API, and UI engineering challenges encountered during the development and deployment of **YT-RAG Bot**, along with their root-cause analyses and technical solutions.
+This document tracks the comprehensive list of architectural, infrastructure, API, and UI engineering challenges encountered during the development and deployment of **VidSense**, along with their root-cause analyses and technical solutions.
 
 ---
 

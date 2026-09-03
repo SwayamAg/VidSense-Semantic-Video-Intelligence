@@ -1,4 +1,4 @@
-# YT-RAG Bot: Technical Architecture & Methodology
+# VidSense: Technical Architecture & Methodology
 
 ## 🛠 SDE Perspective: Design Goals
 As a senior developer, this project was architected with core engineering principles in mind:

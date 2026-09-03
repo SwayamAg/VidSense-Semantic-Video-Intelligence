@@ -136,8 +136,20 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                         pass
 
                 if json_fmt:
-                    resp = dl_session.get(json_fmt, headers=sub_headers, timeout=10)
-                    if resp.status_code == 200 and resp.text.strip():
+                    resp = None
+                    try:
+                        resp = dl_session.get(json_fmt, headers=sub_headers, timeout=10)
+                    except Exception:
+                        pass
+                    
+                    if not resp or resp.status_code != 200 or not resp.text.strip():
+                        # Direct unauthenticated GET often succeeds if signed parameters are already present in baseUrl
+                        try:
+                            resp = requests.get(json_fmt, timeout=10)
+                        except Exception:
+                            pass
+
+                    if resp and resp.status_code == 200 and resp.text.strip():
                         data = resp.json()
                         formatted_events = []
                         for event in data.get('events', []):
@@ -153,13 +165,23 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                         if formatted_events:
                             return " ".join(formatted_events)
                     else:
-                        print(f"[FETCH] json3 timedtext responded with status {resp.status_code}")
+                        print(f"[FETCH] json3 timedtext responded with status {resp.status_code if resp else 'None'}")
 
                 # 2. Try vtt / srv format fallback
                 other_fmt = next((f['url'] for f in formats if f.get('url')), None)
                 if other_fmt:
-                    o_resp = dl_session.get(other_fmt, headers=sub_headers, timeout=10)
-                    if o_resp.status_code == 200 and o_resp.text.strip():
+                    o_resp = None
+                    try:
+                        o_resp = dl_session.get(other_fmt, headers=sub_headers, timeout=10)
+                    except Exception:
+                        pass
+                    if not o_resp or o_resp.status_code != 200:
+                        try:
+                            o_resp = requests.get(other_fmt, timeout=10)
+                        except Exception:
+                            pass
+
+                    if o_resp and o_resp.status_code == 200 and o_resp.text.strip():
                         import re
                         lines = [line.strip() for line in o_resp.text.splitlines() if line.strip() and not line.startswith('WEBVTT') and not line.startswith('NOTE') and not re.match(r'^\d+$', line) and not '-->' in line]
                         if lines:
@@ -167,6 +189,7 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
             else:
                 print(f"[FETCH] No matching subtitle key found in: {list(subtitles.keys())[:10]}")
         return None
+
 
 
     except Exception as e:

@@ -54,51 +54,57 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
         except Exception:
             pass
 
-    ydl_opts = {
+    # Two-tier extractor:
+    # 1. Primary: Mobile client without cookies (bypasses PO-token and SABR web client experiments)
+    # 2. Secondary: Authenticated cookie session with desktop/mobile clients
+    
+    attempts = []
+    
+    # Fast tier: Mobile API without cookies
+    attempts.append({
         'skip_download': True,
-        'writeautomaticsub': True,
-        'writesubtitles': True,
-        'subtitleslangs': ['en.*', 'en', 'hi.*', 'hi'],
-        'check_formats': False,
         'quiet': True,
         'no_warnings': True,
+        'check_formats': False,
         'js_runtimes': {'node': {}},
+        'extractor_args': {'youtube': {'player_client': ['android_vr', 'android', 'ios']}},
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
             'Accept-Language': 'en-US,en;q=0.9',
         }
-    }
+    })
 
+    # Auth tier: If cookies exist, configure authenticated extraction
     if cookie_file:
-        ydl_opts['cookiefile'] = cookie_file
-        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'ios', 'web', 'mweb']}}
-    else:
-        ydl_opts['extractor_args'] = {'youtube': {'player_client': ['android', 'ios', 'web']}}
+        attempts.append({
+            'skip_download': True,
+            'quiet': True,
+            'no_warnings': True,
+            'check_formats': False,
+            'cookiefile': cookie_file,
+            'js_runtimes': {'node': {}},
+            'extractor_args': {'youtube': {'player_client': ['mweb', 'web_creator', 'web']}},
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+                'Accept-Language': 'en-US,en;q=0.9',
+            }
+        })
 
-
-
-
-
-
-
-    
-    try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            # Passing process=False extracts metadata and subtitles directly without failing on video stream format checks
-            try:
-                info = ydl.extract_info(url, download=False, process=False)
-            except Exception:
-                info = ydl.extract_info(url, download=False)
-            
-            if not info:
-                return None
-
-            # Prioritize manual subtitles over automatic ones
-            subtitles = info.get('subtitles') or info.get('automatic_captions')
-            if not subtitles:
-                return None
-
+    for attempt_opts in attempts:
+        try:
+            with yt_dlp.YoutubeDL(attempt_opts) as ydl:
+                try:
+                    info = ydl.extract_info(url, download=False, process=False)
+                except Exception:
+                    info = ydl.extract_info(url, download=False)
                 
+                if not info:
+                    continue
+
+                subtitles = info.get('subtitles') or info.get('automatic_captions')
+                if not subtitles:
+                    continue
+
             chosen_key = None
             # 1. Exact or prefix match against priority English dialects
             for lang in ENGLISH_KEYS:
@@ -188,12 +194,12 @@ def fetch_transcript_with_ytdlp(video_id: str) -> Optional[str]:
                             return " ".join(lines)
             else:
                 print(f"[FETCH] No matching subtitle key found in: {list(subtitles.keys())[:10]}")
-        return None
+        except Exception as e:
+            print(f"[DEBUG] yt-dlp attempt failed: {e}")
+            continue
 
+    return None
 
-
-    except Exception as e:
-        print(f"[WARNING] yt-dlp extraction failed: {e}")
 
 
     # 2. Standalone Direct Innertube captionTracks fallback with session cookiejar
